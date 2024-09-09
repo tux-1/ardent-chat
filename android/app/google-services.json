@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567364561280",
+    "project_id": "depi-chat-app",
+    "storage_bucket": "depi-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567364561280:android:53315a490df4f5f96a3965",
+        "android_client_info": {
+          "package_name": "com.example.ardent_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiqNOChDIqx-4WjIezh5gfML9D0N-qtlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
