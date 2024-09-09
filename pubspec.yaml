@@ -30,7 +30,7 @@ environment:
 dependencies:
   cloud_firestore: null
   cupertino_icons: ^1.0.6
-  firebase_auth: null
+  firebase_auth: any
   firebase_core: null
   flutter:
     sdk: flutter

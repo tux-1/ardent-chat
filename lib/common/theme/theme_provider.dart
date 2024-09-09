@@ -1,10 +1,8 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-
-// Define the provider with Hive check and default to MediaQuery brightness
-final themeProvider = Provider<bool?>((ref) {
+// Define the state provider to manage dark mode
+final themeProvider = StateProvider<bool?>((ref) {
   // Open or access the Hive box
   var box = Hive.box('settings');
 

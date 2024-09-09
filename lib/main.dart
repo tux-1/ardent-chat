@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/helpers/theme_helper.dart';
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,14 @@ void main() async {
 
   // Initialize Hive and Hive Flutter
   await Hive.initFlutter();
-  await Hive.openBox('isDarkMode');
+  await Hive.openBox('settings');
 
   // Initialize firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -38,10 +39,21 @@ class MyApp extends ConsumerWidget {
     bool finalTheme = themePreference ?? isDarkMode;
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ardent Chat',
       themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
       theme: kLightTheme,
       darkTheme: kDarkTheme,
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              ThemeHelper.toggleThemeMode(ref);
+            },
+            child: Text('Switch mode'),
+          ),
+        ),
+      ),
     );
   }
 }
