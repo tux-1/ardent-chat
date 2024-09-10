@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/common/helpers/theme_helper.dart';
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -56,7 +57,11 @@ class MyApp extends ConsumerWidget {
         ),
       ),
       routes: {
-        
+        Routes.addFriendScreen: (context) => Container(),
+        Routes.authenticationScreen: (context) => Container(),
+        Routes.homeScreen: (context) => Container(),
+        Routes.onBoardingScreen: (context) => Container(),
+        Routes.verifyAuthenticationScreen: (context) => Container(),
       },
     );
   }
