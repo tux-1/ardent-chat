@@ -49,11 +49,15 @@ class MyApp extends ConsumerWidget {
           child: ElevatedButton(
             onPressed: () {
               ThemeHelper.toggleThemeMode(ref);
+              Navigator.of(context).pushNamed('ChatScreen');
             },
             child: Text('Switch mode'),
           ),
         ),
       ),
+      routes: {
+        
+      },
     );
   }
 }

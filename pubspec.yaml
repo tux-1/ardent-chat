@@ -34,6 +34,8 @@ dependencies:
   firebase_core: null
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.0
+  flutter_bloc: ^8.1.6
   flutter_riverpod: ^2.5.1
   hive_flutter: ^1.1.0
 
