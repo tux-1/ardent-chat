@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class Onboarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
 
       body: Padding(
@@ -14,7 +15,7 @@ class OnboardingScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'images/welcome (1).png',
+              'assets/images/welcome (1).png',
               fit: BoxFit.fill,
             ),
             Spacer(flex:2),
@@ -45,7 +46,7 @@ class OnboardingScreen extends StatelessWidget {
               onPressed: () async {
                 var box = Hive.box('settings');
                 await box.put('is', true);
-                Navigator.of(context).pushNamed('homeScreen');
+                Navigator.of(context).pushReplacementNamed('homeScreen');
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -60,6 +61,8 @@ class OnboardingScreen extends StatelessWidget {
           ],
         ),
       ),
+
     );
+
   }
 }

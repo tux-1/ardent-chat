@@ -8,7 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'screens/onboarding/onboarding.dart';
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
-
+import 'screens/onboarding/onboarding_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -44,17 +44,18 @@ class MyApp extends ConsumerWidget {
       theme: kLightTheme,
       darkTheme: kDarkTheme,
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              ThemeHelper.toggleThemeMode(ref);
-              Navigator.of(context).pushNamed('ChatScreen');
-            },
-            child: Text('Switch mode'),
-          ),
-        ),
-      ),
+      home:OnboardingScreen(),
+      // Scaffold(
+      //   body: Center(
+      //     child: ElevatedButton(
+      //       onPressed: () {
+      //         ThemeHelper.toggleThemeMode(ref);
+      //         Navigator.of(context).pushNamed('ChatScreen');
+      //       },
+      //       child: Text('Switch mode'),
+      //     ),
+      //   ),
+      // ),
       routes: {
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
