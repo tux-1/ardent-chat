@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
 
 class AnimatedSplash extends StatefulWidget {
+  const AnimatedSplash({super.key});
+
   @override
   _AnimatedSplashState createState() => _AnimatedSplashState();
 }
