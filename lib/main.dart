@@ -1,14 +1,15 @@
 import 'package:ardent_chat/common/constants/routes.dart';
-import 'package:ardent_chat/common/helpers/theme_helper.dart';
+
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'screens/onboarding/onboarding.dart';
+
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
-import 'screens/onboarding/onboarding_screen.dart';
+import 'screens/initial_screen/initial_screen_widget.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,6 +24,7 @@ void main() async {
 
   runApp(const ProviderScope(child: MyApp()));
 }
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
@@ -44,18 +46,7 @@ class MyApp extends ConsumerWidget {
       theme: kLightTheme,
       darkTheme: kDarkTheme,
       debugShowCheckedModeBanner: false,
-      home:OnboardingScreen(),
-      // Scaffold(
-      //   body: Center(
-      //     child: ElevatedButton(
-      //       onPressed: () {
-      //         ThemeHelper.toggleThemeMode(ref);
-      //         Navigator.of(context).pushNamed('ChatScreen');
-      //       },
-      //       child: Text('Switch mode'),
-      //     ),
-      //   ),
-      // ),
+      home: const InitialScreenWidget(),
       routes: {
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
