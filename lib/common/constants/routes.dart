@@ -4,4 +4,5 @@ class Routes {
   static const verifyAuthenticationScreen = 'verifyAuthenticationScreen';
   static const homeScreen = 'homeScreen';
   static const addFriendScreen = 'addFriendScreen';
+  static const initialScreenWidget = 'initialScreen';
 }

@@ -1,15 +1,16 @@
+import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
 
-class AnimatedSplash extends StatefulWidget {
-  const AnimatedSplash({super.key});
+class AnimatedSplashScreen extends StatefulWidget {
+  const AnimatedSplashScreen({super.key});
 
   @override
-  _AnimatedSplashState createState() => _AnimatedSplashState();
+  _AnimatedSplashScreenState createState() => _AnimatedSplashScreenState();
 }
 
-class _AnimatedSplashState extends State<AnimatedSplash> {
+class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
   String _sloganText = '';
   bool _showCursor = false; // Start with cursor hidden
   final String _completeSlogan = "WHERE CONVERSATIONS SPARK";
@@ -30,38 +31,44 @@ class _AnimatedSplashState extends State<AnimatedSplash> {
     });
   }
 
-  void _startTypingEffect() {
+  Future<void> _startTypingEffect() async {
     Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
-      if (_sloganIndex < _completeSlogan.length) {
-        setState(() {
-          _sloganText += _completeSlogan[_sloganIndex];
-          _sloganIndex++;
+      if (mounted) {
+        if (_sloganIndex < _completeSlogan.length) {
+          setState(() {
+            _sloganText += _completeSlogan[_sloganIndex];
+            _sloganIndex++;
 
-          // Check if the first character has been typed
-          if (!_firstCharacterTyped) {
-            _firstCharacterTyped = true;
-            _blinkCursor();
-          }
-        });
-      } else {
-        timer.cancel();
-        _blinkCursor();
+            // Check if the first character has been typed
+            if (!_firstCharacterTyped) {
+              _firstCharacterTyped = true;
+              _blinkCursor();
+            }
+          });
+        } else {
+          Navigator.of(context)
+              .pushReplacementNamed(Routes.initialScreenWidget);
+          timer.cancel();
+          _blinkCursor();
+        }
       }
     });
   }
 
   void _blinkCursor() {
     Timer.periodic(const Duration(milliseconds: 500), (Timer timer) {
-      setState(() {
-        _showCursor = !_showCursor;
-      });
+      if (mounted) {
+        setState(() {
+          _showCursor = !_showCursor;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onSecondary,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

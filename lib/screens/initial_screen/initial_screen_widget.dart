@@ -43,6 +43,7 @@ class _InitialScreenWidgetState extends State<InitialScreenWidget> {
             // TODO: Navigate user to verification screen
           }
           // TODO: If user passes verification then should be navigated to the home page
+          // TODO: Go to home page here
         }
         return const Scaffold(
           body: Center(
