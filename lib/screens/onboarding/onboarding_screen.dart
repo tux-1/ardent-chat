@@ -41,7 +41,9 @@ class OnboardingScreen extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(300, 50),
-                backgroundColor: const Color(0xFF090057),
+                backgroundColor: Theme.of(context).primaryColor,
+                shadowColor: Theme.of(context).primaryColor,
+                elevation: 10,
               ),
               onPressed: () {
                 var box = Hive.box('settings');
