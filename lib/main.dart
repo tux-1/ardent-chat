@@ -1,6 +1,7 @@
 import 'package:ardent_chat/common/constants/routes.dart';
 
 import 'package:ardent_chat/common/theme/theme.dart';
+import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class MyApp extends ConsumerWidget {
         Routes.initialScreenWidget: (context) => const InitialScreenWidget(),
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
+        Routes.loginScreen: (context) => const LoginScreen(),
         Routes.homeScreen: (context) => Container(),
         Routes.onBoardingScreen: (context) => Container(),
         Routes.verifyAuthenticationScreen: (context) => Container(),

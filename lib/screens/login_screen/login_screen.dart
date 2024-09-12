@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               topRight: Radius.circular(30),
             )),
         child: Padding(
-          padding: const EdgeInsets.only(top: 32.0, left: 32.0, right: 32.0, bottom: 65.0),
+          padding: const EdgeInsets.only(top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
           child: _buildForm(),
         ),
       ),
@@ -192,5 +192,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-void main() => runApp(MaterialApp(home: LoginScreen()));

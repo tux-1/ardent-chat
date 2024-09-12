@@ -76,7 +76,7 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
           children: [
             // Logo animation (Fade in and move left)
             Image.asset(
-              'assets/images/Logo3.png',
+              'assets/images/Logo3-Transparent.png',
               width: 85,
             )
                 .animate()
@@ -87,7 +87,7 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/Ardent-Chat-Text.png',
+                  'assets/images/Ardent-Chat-Text-Transparent.png',
                   width: 200,
                   // "ARDENT CHAT" text animation (Fade in after the logo moves)
                 ).animate().fadeIn(duration: 1000.ms, delay: 1600.ms),
