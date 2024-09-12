@@ -58,6 +58,42 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/
+  fonts:
+    - family: LEMONMILK
+      fonts:
+        - asset: assets/fonts/LEMONMILK-Light.otf
+          weight: 300
+          style: normal
+        - asset: assets/fonts/LEMONMILK-Regular.otf
+          weight: 400
+          style: normal
+        - asset: assets/fonts/LEMONMILK-Medium.otf
+          weight: 500
+          style: normal
+        - asset: assets/fonts/LEMONMILK-Bold.otf
+          weight: 700
+          style: normal
+        - asset: assets/fonts/LEMONMILK-LightItalic.otf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/LEMONMILK-RegularItalic.otf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/LEMONMILK-MediumItalic.otf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/LEMONMILK-BoldItalic.otf
+          weight: 700
+          style: italic
+
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Quicksand-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Quicksand-Medium.ttf
+          weight: 500
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

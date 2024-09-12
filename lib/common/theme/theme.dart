@@ -4,7 +4,7 @@ final ThemeData kLightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
-    primary: Color(0xFF6A00FF), // Purple for buttons and accents
+    primary: Color(0xFF6e3cfd), // Purple for buttons and accents
     onPrimary: Colors.white, // White text/icons on primary color
     secondary: Color(0xFFF5F5F5), // Light grey for background areas
     onSecondary: Color(0xFF333333), // Dark text on secondary elements
@@ -18,7 +18,7 @@ final ThemeData kDarkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
-    primary: Color(0xFF6A00FF), // Purple for buttons and accents
+    primary: Color(0xFF6e3cfd), // Purple for buttons and accents
     onPrimary: Colors.white, // White text/icons on primary color
     secondary: Color(0xFF333333), // Dark grey for background areas
     onSecondary: Color(0xFFF5F5F5), // Light text on dark elements
