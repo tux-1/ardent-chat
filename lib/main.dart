@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
 import 'screens/initial_screen/initial_screen_widget.dart';
+import 'screens/signup_screen/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,12 +49,13 @@ class MyApp extends ConsumerWidget {
       theme: kLightTheme,
       darkTheme: kDarkTheme,
       debugShowCheckedModeBanner: false,
-      home: const AnimatedSplashScreen(),
+      home: const SignUpScreen(),
       routes: {
         Routes.initialScreenWidget: (context) => const InitialScreenWidget(),
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
         Routes.loginScreen: (context) => const LoginScreen(),
+        Routes.signUpScreen: (context) => const SignUpScreen(),
         Routes.homeScreen: (context) => Container(),
         Routes.onBoardingScreen: (context) => Container(),
         Routes.verifyAuthenticationScreen: (context) => Container(),
