@@ -1,3 +1,5 @@
+import 'package:ardent_chat/common/constants/routes.dart';
+import 'package:ardent_chat/common/widgets/theme_switch.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/regex_validation.dart';
@@ -12,7 +14,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   late Color myColor;
   late Color darkBlueColor;
-  late Size mediaSize;
+
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -26,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     myColor = const Color(0xFF703eff);
     darkBlueColor = const Color(0xFF090057);
-    mediaSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: myColor,
       body: SingleChildScrollView(
@@ -42,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildTop() {
     return SizedBox(
-      width: mediaSize.width,
+      width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -61,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildBottom() {
     return SizedBox(
-      width: mediaSize.width,
+      width: double.infinity,
       child: Card(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -97,6 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
           _buildGreyText("Sign up with your information"),
+          ThemeSwitch(), // TODO: Remove after testing dark mode
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(top: 20.0, right: 20, bottom: 20),
@@ -120,6 +123,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isPassword: true, validator: _confirmPasswordValidator),
                 const SizedBox(height: 35),
                 _buildSignUpButton(),
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account?   ",
+                      style: TextStyle(
+                        color: darkBlueColor,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Quicksand",
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(Routes.loginScreen);
+                      },
+                      child: Text(
+                        "Log in",
+                        style: TextStyle(
+                          color: darkBlueColor,
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),
