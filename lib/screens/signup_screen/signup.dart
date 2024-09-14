@@ -99,6 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
           _buildGreyText("Sign up with your information"),
+          ThemeSwitch(), // TODO: Remove after testing dark mode
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(top: 20.0, right: 20, bottom: 20),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/constants/regex_validation.dart';
 import '../../common/constants/routes.dart';
+import '../../common/widgets/theme_switch.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -94,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           _buildGreyText("Login with your information"),
+          ThemeSwitch(), // TODO: Remove after testing dark mode
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(top: 20.0, right: 20, bottom: 20),
