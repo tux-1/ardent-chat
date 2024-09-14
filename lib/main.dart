@@ -3,6 +3,7 @@ import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +50,7 @@ class MyApp extends ConsumerWidget {
       theme: kLightTheme,
       darkTheme: kDarkTheme,
       debugShowCheckedModeBanner: false,
-      home: const SignUpScreen(),
+      home: const AnimatedSplashScreen(),
       routes: {
         Routes.initialScreenWidget: (context) => const InitialScreenWidget(),
         Routes.addFriendScreen: (context) => Container(),

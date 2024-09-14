@@ -1,3 +1,4 @@
+import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,22 +35,18 @@ class _InitialScreenWidgetState extends State<InitialScreenWidget> {
     return Builder(
       builder: (context) {
         if (_isFirstTime) {
-          return OnboardingScreen();
+          return const OnboardingScreen();
         }
-        // Check if user is authenticated
+        // Check if user is not authenticated
         else if (FirebaseAuth.instance.currentUser != null) {
-          // If user is not verified send to verification screen
+          // Check if verified
           if (!FirebaseAuth.instance.currentUser!.emailVerified) {
             // TODO: Navigate user to verification screen
           }
-          // TODO: If user passes verification then should be navigated to the home page
+          // If user passes verification then should be navigated to the home page
           // TODO: Go to home page here
         }
-        return const Scaffold(
-          body: Center(
-            child: Text('Login screen ????'),
-          ),
-        );
+        return const LoginScreen();
       },
     );
   }

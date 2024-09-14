@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/constants/regex_validation.dart';
+import '../../common/constants/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late Color myColor;
   late Color darkBlueColor;
-  late Size mediaSize;
+  
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool rememberUser = false;
@@ -24,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
     darkBlueColor = const Color(0xFF090057);
-    mediaSize = MediaQuery.of(context).size;
+    
     return Scaffold(
       backgroundColor: myColor,
       body: SingleChildScrollView(
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTop() {
     return SizedBox(
-      width: mediaSize.width,
+      width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildBottom() {
     return SizedBox(
-      width: mediaSize.width,
+      width:double.infinity,
       child: Card(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -120,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     InkWell(
                       onTap: () {
-                        // Navigate to the Sign Up screen
+                        Navigator.of(context)
+                            .pushReplacementNamed(Routes.signUpScreen);
                       },
                       child: Text(
                         "Sign Up",
