@@ -1,7 +1,10 @@
 import 'package:ardent_chat/common/constants/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
+
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AnimatedSplashScreen extends StatefulWidget {
   const AnimatedSplashScreen({super.key});
@@ -11,6 +14,7 @@ class AnimatedSplashScreen extends StatefulWidget {
 }
 
 class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
+  bool _isFirstTime = true;
   String _sloganText = '';
   bool _showCursor = false; // Start with cursor hidden
   final String _completeSlogan = "WHERE CONVERSATIONS SPARK";
@@ -20,6 +24,7 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkFirstTime();
     _startAnimations();
   }
 
@@ -46,13 +51,45 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
             }
           });
         } else {
-          Navigator.of(context)
-              .pushReplacementNamed(Routes.initialScreenWidget);
+          _navigateToNextScreen();
           timer.cancel();
           _blinkCursor();
         }
       }
     });
+  }
+
+  void _navigateToNextScreen() {
+    if (_isFirstTime) {
+      Navigator.of(context).pushReplacementNamed(Routes.onBoardingScreen);
+      return;
+    }
+    // Check if user is authenticated
+    else if (FirebaseAuth.instance.currentUser != null) {
+      // Check if verified
+      if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+        Navigator.of(context).pushReplacementNamed(
+          Routes.verifyAuthenticationScreen,
+        );
+        return;
+      }
+      // If user passes verification then should be navigated to the home page
+      Navigator.of(context).pushReplacementNamed(
+        Routes.homeScreen,
+      );
+      return;
+    }
+    Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
+  }
+
+  void _checkFirstTime() async {
+    var box = Hive.box('settings');
+    bool isFirstTime = box.get('isFirstTime', defaultValue: false);
+    if (isFirstTime) {
+      setState(() {
+        _isFirstTime = false;
+      });
+    }
   }
 
   void _blinkCursor() {

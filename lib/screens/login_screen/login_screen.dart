@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/helpers/auth_helper.dart';
 import 'package:ardent_chat/common/widgets/dynamic_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -194,7 +195,11 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_formKey.currentState?.validate() ?? false) {
           debugPrint("Email : ${emailController.text}");
           debugPrint("Password : ${passwordController.text}");
-          // Perform login action
+          AuthHelper.logIn(
+            email: emailController.text,
+            password: passwordController.text,
+            context: context,
+          );
         }
       },
       style: ElevatedButton.styleFrom(

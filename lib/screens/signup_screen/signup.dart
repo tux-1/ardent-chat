@@ -1,4 +1,5 @@
 import 'package:ardent_chat/common/constants/routes.dart';
+import 'package:ardent_chat/common/helpers/auth_helper.dart';
 import 'package:ardent_chat/common/widgets/dynamic_form_field.dart';
 import 'package:ardent_chat/common/widgets/theme_switch.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +17,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late Color myColor;
   late Color darkBlueColor;
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  
 
   final _formKey = GlobalKey<FormState>();
 
@@ -108,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 _buildGreyText("Username"),
                 DynamicFormField(
-                    controller: nameController,
+                    controller: usernameController,
                     isPassword: false,
                     validator: _nameValidator),
                 const SizedBox(height: 20),
@@ -184,7 +184,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState?.validate() ?? false) {
-          // Perform sign-up action
+          AuthHelper.signUp(
+            username: usernameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            context: context,
+          ).onError(
+            (error, stackTrace) {
+              
+            },
+          );
         }
       },
       style: ElevatedButton.styleFrom(

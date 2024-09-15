@@ -2,7 +2,9 @@ import 'package:ardent_chat/common/constants/routes.dart';
 
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
+import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
+import 'package:ardent_chat/screens/verification/verification_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
-import 'screens/initial_screen/initial_screen_widget.dart';
+
 import 'screens/signup_screen/signup.dart';
 
 void main() async {
@@ -50,16 +52,18 @@ class MyApp extends ConsumerWidget {
       theme: kLightTheme,
       darkTheme: kDarkTheme,
       debugShowCheckedModeBanner: false,
-      home: const AnimatedSplashScreen(),
+      initialRoute: Routes.splashScreen,
       routes: {
-        Routes.initialScreenWidget: (context) => const InitialScreenWidget(),
+        Routes.splashScreen: (context) => const AnimatedSplashScreen(),
+        
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
         Routes.loginScreen: (context) => const LoginScreen(),
         Routes.signUpScreen: (context) => const SignUpScreen(),
-        Routes.homeScreen: (context) => Container(),
-        Routes.onBoardingScreen: (context) => Container(),
-        Routes.verifyAuthenticationScreen: (context) => Container(),
+        // TODO: Finish home screen UI and place it here
+        Routes.homeScreen: (context) => const Text('Home'), 
+        Routes.onBoardingScreen: (context) => const OnboardingScreen(),
+        Routes.verifyAuthenticationScreen: (context) => const VerificationScreen(),
       },
     );
   }
