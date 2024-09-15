@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_riverpod: ^2.5.1
   hive_flutter: ^1.1.0
+  intl:
 
 dev_dependencies:
   flutter_lints: ^3.0.0
