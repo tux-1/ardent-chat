@@ -3,6 +3,7 @@ import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
 import 'screens/initial_screen/initial_screen_widget.dart';
+import 'screens/signup_screen/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +56,7 @@ class MyApp extends ConsumerWidget {
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
         Routes.loginScreen: (context) => const LoginScreen(),
+        Routes.signUpScreen: (context) => const SignUpScreen(),
         Routes.homeScreen: (context) => Container(),
         Routes.onBoardingScreen: (context) => Container(),
         Routes.verifyAuthenticationScreen: (context) => Container(),
