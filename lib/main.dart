@@ -34,14 +34,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Use MediaQuery to get the brightness
-    var brightness = MediaQuery.of(context).platformBrightness;
+    // Get the brightness
+    var brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
 
-    // Get the Hive-stored or MediaQuery-based theme setting
+    // Get the Hive-stored or Theme.of(context)-based theme setting
     final themePreference = ref.watch(themeProvider);
 
-    // If Hive box value is null (not set), use the default MediaQuery brightness
+    // If Hive box value is null (not set), use the default Theme.of(context) brightness
     bool finalTheme = themePreference ?? isDarkMode;
 
     return MaterialApp(

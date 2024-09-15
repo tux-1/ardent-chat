@@ -1,4 +1,5 @@
 import 'package:ardent_chat/common/constants/routes.dart';
+import 'package:ardent_chat/common/widgets/dynamic_form_field.dart';
 import 'package:ardent_chat/common/widgets/theme_switch.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  
 
   final _formKey = GlobalKey<FormState>();
 
@@ -106,21 +106,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildGreyText("Name"),
-                _buildInputField(nameController,
-                    isPassword: false, validator: _nameValidator),
+                _buildGreyText("Username"),
+                DynamicFormField(
+                    controller: nameController,
+                    isPassword: false,
+                    validator: _nameValidator),
                 const SizedBox(height: 20),
                 _buildGreyText("Email"),
-                _buildInputField(emailController,
-                    isPassword: false, validator: _emailValidator),
+                DynamicFormField(
+                    controller: emailController,
+                    isPassword: false,
+                    validator: _emailValidator),
                 const SizedBox(height: 20),
                 _buildGreyText("Password"),
-                _buildInputField(passwordController,
-                    isPassword: true, validator: _passwordValidator),
+                DynamicFormField(
+                  controller: passwordController,
+                  isPassword: true,
+                  validator: _passwordValidator,
+                ),
                 const SizedBox(height: 20),
                 _buildGreyText("Confirm Password"),
-                _buildInputField(confirmPasswordController,
-                    isPassword: true, validator: _confirmPasswordValidator),
+                DynamicFormField(
+                  controller: confirmPasswordController,
+                  isPassword: true,
+                  validator: _confirmPasswordValidator,
+                ),
                 const SizedBox(height: 35),
                 _buildSignUpButton(),
                 const SizedBox(height: 25),
@@ -170,37 +180,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller,
-      {required bool isPassword,
-      required String? Function(String?) validator}) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword ? _obscurePassword : false,
-      decoration: InputDecoration(
-        suffixIcon: isPassword
-            ? IconButton(
-                icon: Icon(
-                  isPassword
-                      ? (_obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility)
-                      : (_obscureConfirmPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (isPassword) {
-                      _obscurePassword = !_obscurePassword;
-                    } else {
-                      _obscureConfirmPassword = !_obscureConfirmPassword;
-                    }
-                  });
-                },
-              )
-            : null,
+  Widget _buildSignUpButton() {
+    return ElevatedButton(
+      onPressed: () {
+        if (_formKey.currentState?.validate() ?? false) {
+          // Perform sign-up action
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        elevation: 10,
+        shadowColor: myColor,
+        backgroundColor: myColor,
+        minimumSize: const Size.fromHeight(60),
       ),
-      validator: validator,
+      child: Text(
+        "SIGN UP",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 
@@ -236,30 +237,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return 'Passwords do not match';
     }
     return null;
-  }
-
-  Widget _buildSignUpButton() {
-    return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          // Perform sign-up action
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        elevation: 10,
-        shadowColor: myColor,
-        backgroundColor: myColor,
-        minimumSize: const Size.fromHeight(60),
-      ),
-      child: Text(
-        "SIGN UP",
-        style: TextStyle(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          fontFamily: "Quicksand",
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
   }
 }
