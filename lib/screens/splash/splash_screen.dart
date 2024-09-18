@@ -59,13 +59,26 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
     });
   }
 
-  void _navigateToNextScreen() {
+  void _navigateToNextScreen() async {
     if (_isFirstTime) {
       Navigator.of(context).pushReplacementNamed(Routes.onBoardingScreen);
       return;
     }
-    // Check if user is authenticated
     else if (FirebaseAuth.instance.currentUser != null) {
+      await FirebaseAuth.instance.currentUser?.reload().onError(
+        (error, stackTrace) {
+          // User has been deleted
+          Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
+          return;
+        },
+      );
+
+      if (FirebaseAuth.instance.currentUser?.uid == null) {
+        // User has been deleted
+        Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
+        return;
+      }
+
       // Check if verified
       if (!FirebaseAuth.instance.currentUser!.emailVerified) {
         Navigator.of(context).pushReplacementNamed(
@@ -73,12 +86,14 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
         );
         return;
       }
+
       // If user passes verification then should be navigated to the home page
       Navigator.of(context).pushReplacementNamed(
         Routes.homeScreen,
       );
       return;
     }
+
     Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
   }
 

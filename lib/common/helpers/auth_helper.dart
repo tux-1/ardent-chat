@@ -19,7 +19,8 @@ class AuthHelper {
         email: email,
         password: password,
       );
-      if (!userCredential.user!.emailVerified) {
+
+      if (userCredential.user?.emailVerified == false) {
         navigator.pushReplacementNamed(Routes.verifyAuthenticationScreen);
       } else {
         navigator.pushReplacementNamed(Routes.homeScreen);
@@ -89,9 +90,10 @@ class AuthHelper {
   }
 
   static Future<void> signOut(BuildContext context) async {
-    _auth.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
-    Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
+    final nav = Navigator.of(context);
+    await _auth.signOut();
+    nav.popUntil((route) => route.isFirst);
+    nav.pushReplacementNamed(Routes.loginScreen);
   }
 
   static Future<void> resendVerification() async {
