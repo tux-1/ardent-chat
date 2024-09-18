@@ -1,6 +1,8 @@
+import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Global constant to access the Authentication functions
 class AuthHelper {
@@ -9,12 +11,20 @@ class AuthHelper {
   static Future<void> logIn({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      final navigator = Navigator.of(context);
+      final userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      if (userCredential.user?.emailVerified == false) {
+        navigator.pushReplacementNamed(Routes.verifyAuthenticationScreen);
+      } else {
+        navigator.pushReplacementNamed(Routes.homeScreen);
+      }
     } on FirebaseAuthException catch (error) {
       String message = 'An error occured, please check your credentials.';
       if (error.message != null) {
@@ -31,8 +41,10 @@ class AuthHelper {
     required String username,
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
+      final navigator = Navigator.of(context);
       // Step 1: Check if the username already exists
       final usernameQuery = await FirebaseFirestore.instance
           .collection('users')
@@ -51,6 +63,8 @@ class AuthHelper {
         password: password,
       );
 
+      await userCredential.user!.sendEmailVerification();
+
       // Step 3: Save the user details to Firestore
       await FirebaseFirestore.instance
           .collection('users')
@@ -59,6 +73,7 @@ class AuthHelper {
         'email': email,
         'username': username,
       });
+      navigator.pushReplacementNamed(Routes.verifyAuthenticationScreen);
     } on FirebaseAuthException catch (error) {
       String message = 'An error occurred, please check your credentials.';
       if (error.message != null) {
@@ -70,7 +85,18 @@ class AuthHelper {
       if (kDebugMode) {
         print(error);
       }
-      throw ErrorDescription('An error occurred');
+      throw ErrorDescription('An error occurred: $error');
     }
+  }
+
+  static Future<void> signOut(BuildContext context) async {
+    final nav = Navigator.of(context);
+    await _auth.signOut();
+    nav.popUntil((route) => route.isFirst);
+    nav.pushReplacementNamed(Routes.loginScreen);
+  }
+
+  static Future<void> resendVerification() async {
+    _auth.currentUser?.sendEmailVerification();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/helpers/theme_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,12 +11,12 @@ class ThemeSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = ref.watch(themeProvider);
 
-    var brightness = MediaQuery.of(context).platformBrightness;
+    var brightness = Theme.of(context).brightness;
     final switchValue = isDarkMode ?? (brightness == Brightness.dark);
 
     return Switch(
       value: switchValue,
-      onChanged: (newValue) => ref.read(themeProvider.notifier).state = newValue,
+      onChanged: (newValue) => ThemeHelper.toggleThemeMode(ref),
     );
   }
 }

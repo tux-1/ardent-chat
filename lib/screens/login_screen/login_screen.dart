@@ -1,3 +1,5 @@
+import 'package:ardent_chat/common/helpers/auth_helper.dart';
+import 'package:ardent_chat/common/widgets/dynamic_form_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/regex_validation.dart';
@@ -14,11 +16,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late Color myColor;
   late Color darkBlueColor;
-  
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool rememberUser = false;
-  bool _obscurePassword = true; // State to toggle password visibility
 
   final _formKey = GlobalKey<FormState>(); // Add a global key for the form
 
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
     darkBlueColor = const Color(0xFF090057);
-    
+
     return Scaffold(
       backgroundColor: myColor,
       body: SingleChildScrollView(
@@ -61,15 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildBottom() {
     return SizedBox(
-      width:double.infinity,
+      width: double.infinity,
       child: Card(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            )),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        )),
         child: Padding(
-          padding: const EdgeInsets.only(top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
+          padding: const EdgeInsets.only(
+              top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
           child: _buildForm(),
         ),
       ),
@@ -103,10 +105,19 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildGreyText("Email"),
-                _buildInputField(emailController, isPassword: false, validator: _emailValidator),
+                DynamicFormField(
+                  controller: emailController,
+                  isPassword: false,
+                  validator: _emailValidator,
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                ),
                 const SizedBox(height: 50),
                 _buildGreyText("Password"),
-                _buildInputField(passwordController, isPassword: true, validator: _passwordValidator),
+                DynamicFormField(
+                  controller: passwordController,
+                  isPassword: true,
+                  validator: _passwordValidator,
+                ),
                 const SizedBox(height: 35),
                 _buildLoginButton(),
                 const SizedBox(height: 25),
@@ -156,29 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller,
-      {required bool isPassword, required String? Function(String?) validator}) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword ? _obscurePassword : false,
-      decoration: InputDecoration(
-        suffixIcon: isPassword
-            ? IconButton(
-          icon: Icon(
-            _obscurePassword ? Icons.visibility_off : Icons.visibility,
-          ),
-          onPressed: () {
-            setState(() {
-              _obscurePassword = !_obscurePassword;
-            });
-          },
-        )
-            : null,
-      ),
-      validator: validator,
-    );
-  }
-
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
@@ -207,7 +195,11 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_formKey.currentState?.validate() ?? false) {
           debugPrint("Email : ${emailController.text}");
           debugPrint("Password : ${passwordController.text}");
-          // Perform login action
+          AuthHelper.logIn(
+            email: emailController.text,
+            password: passwordController.text,
+            context: context,
+          );
         }
       },
       style: ElevatedButton.styleFrom(
