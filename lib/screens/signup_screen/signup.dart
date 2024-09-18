@@ -1,31 +1,32 @@
+import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/common/helpers/auth_helper.dart';
 import 'package:ardent_chat/common/widgets/dynamic_form_field.dart';
+import 'package:ardent_chat/common/widgets/theme_switch.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/regex_validation.dart';
-import '../../common/constants/routes.dart';
-import '../../common/widgets/theme_switch.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   late Color myColor;
   late Color darkBlueColor;
 
+  TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool rememberUser = false;
+  TextEditingController confirmPasswordController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>(); // Add a global key for the form
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    myColor = Theme.of(context).primaryColor;
+    myColor = const Color(0xFF703eff);
     darkBlueColor = const Color(0xFF090057);
 
     return Scaffold(
@@ -65,10 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: Card(
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
@@ -80,14 +82,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildForm() {
     return Form(
-      key: _formKey, // Assign the global key to the Form widget
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Welcome",
+              Text("Create Account",
                   style: TextStyle(
                     color: darkBlueColor,
                     fontSize: 32,
@@ -96,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   )),
             ],
           ),
-          _buildGreyText("Login with your information"),
+          _buildGreyText("Sign up with your information"),
           ThemeSwitch(), // TODO: Remove after testing dark mode
           const SizedBox(height: 20),
           Padding(
@@ -104,28 +106,39 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildGreyText("Username"),
+                DynamicFormField(
+                    controller: usernameController,
+                    isPassword: false,
+                    validator: _nameValidator),
+                const SizedBox(height: 20),
                 _buildGreyText("Email"),
                 DynamicFormField(
-                  controller: emailController,
-                  isPassword: false,
-                  validator: _emailValidator,
-                  autovalidateMode: AutovalidateMode.onUnfocus,
-                ),
-                const SizedBox(height: 50),
+                    controller: emailController,
+                    isPassword: false,
+                    validator: _emailValidator),
+                const SizedBox(height: 20),
                 _buildGreyText("Password"),
                 DynamicFormField(
                   controller: passwordController,
                   isPassword: true,
                   validator: _passwordValidator,
                 ),
+                const SizedBox(height: 20),
+                _buildGreyText("Confirm Password"),
+                DynamicFormField(
+                  controller: confirmPasswordController,
+                  isPassword: true,
+                  validator: _confirmPasswordValidator,
+                ),
                 const SizedBox(height: 35),
-                _buildLoginButton(),
+                _buildSignUpButton(),
                 const SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Didn't have an account?   ",
+                      "Already have an account?   ",
                       style: TextStyle(
                         color: darkBlueColor,
                         fontWeight: FontWeight.w500,
@@ -135,10 +148,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context)
-                            .pushReplacementNamed(Routes.signUpScreen);
+                            .pushReplacementNamed(Routes.loginScreen);
                       },
                       child: Text(
-                        "Sign Up",
+                        "Log in",
                         style: TextStyle(
                           color: darkBlueColor,
                           fontFamily: "Quicksand",
@@ -167,6 +180,47 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _buildSignUpButton() {
+    return ElevatedButton(
+      onPressed: () {
+        if (_formKey.currentState?.validate() ?? false) {
+          AuthHelper.signUp(
+            username: usernameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            context: context,
+          ).onError(
+            (error, stackTrace) {
+              
+            },
+          );
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        elevation: 10,
+        shadowColor: myColor,
+        backgroundColor: myColor,
+        minimumSize: const Size.fromHeight(60),
+      ),
+      child: Text(
+        "SIGN UP",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  String? _nameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    return null;
+  }
+
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
@@ -182,41 +236,15 @@ class _LoginScreenState extends State<LoginScreen> {
       return 'Please enter your password';
     }
     if (!passwordRegex.hasMatch(value)) {
-      return "Password must include one uppercase letter,\none lowercase letter,"
-          " one digit, one special\ncharacter (!@#\$&*~),"
-          " and be at least 8 characters.";
+      return "Password must include one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters.";
     }
     return null;
   }
 
-  Widget _buildLoginButton() {
-    return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          debugPrint("Email : ${emailController.text}");
-          debugPrint("Password : ${passwordController.text}");
-          AuthHelper.logIn(
-            email: emailController.text,
-            password: passwordController.text,
-            context: context,
-          );
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        elevation: 10,
-        shadowColor: myColor,
-        backgroundColor: myColor,
-        minimumSize: const Size.fromHeight(60),
-      ),
-      child: Text(
-        "LOGIN",
-        style: TextStyle(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          fontFamily: "Quicksand",
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
+  String? _confirmPasswordValidator(String? value) {
+    if (value != passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
   }
 }

@@ -48,8 +48,6 @@ class OnboardingScreen extends StatelessWidget {
               onPressed: () {
                 var box = Hive.box('settings');
                 box.put('isFirstTime', true);
-                // TODO: Edit the routing to be to the authenticationScreen first
-                // Navigator.of(context).pushReplacementNamed(Routes.authenticationScreen);
                 Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
               },
               child: const Padding(
