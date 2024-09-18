@@ -236,7 +236,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return 'Please enter your password';
     }
     if (!passwordRegex.hasMatch(value)) {
-      return "Password must include one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters.";
+      return "Password must include one uppercase letter,\none lowercase letter,"
+          " one digit, one special\ncharacter (!@#\$&*~),"
+          " and be at least 8 characters.";
     }
     return null;
   }
