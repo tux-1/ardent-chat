@@ -1,6 +1,7 @@
 import 'package:ardent_chat/common/constants/routes.dart';
 
 import 'package:ardent_chat/common/theme/theme.dart';
+import 'package:ardent_chat/screens/home_screen/home_screen.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
@@ -60,8 +61,7 @@ class MyApp extends ConsumerWidget {
         Routes.authenticationScreen: (context) => Container(),
         Routes.loginScreen: (context) => const LoginScreen(),
         Routes.signUpScreen: (context) => const SignUpScreen(),
-        // TODO: Finish home screen UI and place it here
-        Routes.homeScreen: (context) => const Text('Home'), 
+        Routes.homeScreen: (context) => const HomeScreen(),
         Routes.onBoardingScreen: (context) => const OnboardingScreen(),
         Routes.verifyAuthenticationScreen: (context) => const VerificationScreen(),
       },
