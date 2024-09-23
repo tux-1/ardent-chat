@@ -29,7 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
     darkBlueColor = const Color(0xFF090057);
 
     return Scaffold(
-      backgroundColor: myColor,
+      // backgroundColor: Theme.of(context).brightness == Brightness.dark
+      //     ? myColor // Use black in dark mode
+      //     : myColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -64,6 +67,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return SizedBox(
       width: double.infinity,
       child: Card(
+        // color: myColor,
+        // color: Theme.of(context).brightness == Brightness.dark
+        //     ? Colors.black // Use black in dark mode
+        //     : Colors.white,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
@@ -71,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
         )),
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
+              top: 32.0, left: 32.0, right: 32.0, bottom: 100),
           child: _buildForm(),
         ),
       ),
@@ -89,7 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Text("Welcome",
                   style: TextStyle(
-                    color: darkBlueColor,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // White in dark mode
+                        : darkBlueColor,
                     fontSize: 32,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w700,
@@ -127,7 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       "Didn't have an account?   ",
                       style: TextStyle(
-                        color: darkBlueColor,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // White in dark mode
+                            : darkBlueColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Quicksand",
                       ),
@@ -140,7 +151,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
-                          color: darkBlueColor,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white // White in dark mode
+                              : darkBlueColor,
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w700,
                         ),
@@ -205,14 +218,14 @@ class _LoginScreenState extends State<LoginScreen> {
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         elevation: 10,
-        shadowColor: myColor,
-        backgroundColor: myColor,
+        shadowColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         minimumSize: const Size.fromHeight(60),
       ),
       child: Text(
         "LOGIN",
         style: TextStyle(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).colorScheme.onPrimary,
           fontFamily: "Quicksand",
           fontWeight: FontWeight.w700,
         ),

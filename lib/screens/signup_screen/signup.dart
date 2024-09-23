@@ -91,7 +91,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               Text("Create Account",
                   style: TextStyle(
-                    color: darkBlueColor,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white // White in dark mode
+                        : darkBlueColor,
                     fontSize: 32,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w700,
@@ -140,7 +142,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Text(
                       "Already have an account?   ",
                       style: TextStyle(
-                        color: darkBlueColor,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white // White in dark mode
+                            : darkBlueColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Quicksand",
                       ),
@@ -153,7 +157,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Text(
                         "Log in",
                         style: TextStyle(
-                          color: darkBlueColor,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white // White in dark mode
+                              : darkBlueColor,
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w700,
                         ),
@@ -190,9 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             password: passwordController.text,
             context: context,
           ).onError(
-            (error, stackTrace) {
-              
-            },
+            (error, stackTrace) {},
           );
         }
       },
