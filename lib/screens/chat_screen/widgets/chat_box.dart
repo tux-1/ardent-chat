@@ -6,7 +6,7 @@ import '../../../common/models/message_type.dart';
 class ChatBox extends StatelessWidget {
   final Chat chat;
 
-  ChatBox({super.key, required this.chat});
+  const ChatBox({super.key, required this.chat});
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +47,19 @@ class ChatBox extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),
-          subtitle: buildMessageContent(chat.message,context),
+          subtitle: buildMessageContent(chat.message, context),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 DateFormat.Hm().format(chat.time),
-                style: TextStyle(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .onSurface, fontSize: 12),
+                style: TextStyle(
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .onSurface,
+                  fontSize: 12,
+                ),
               ),
               if (chat.unreadCount > 0)
                 CircleAvatar(
@@ -67,10 +70,13 @@ class ChatBox extends StatelessWidget {
                       .primary,
                   child: Text(
                     chat.unreadCount.toString(),
-                    style: TextStyle(color: Theme
-                        .of(context)
-                        .colorScheme
-                        .onPrimary, fontSize: 12),
+                    style: TextStyle(
+                      color: Theme
+                          .of(context)
+                          .colorScheme
+                          .onPrimary,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
             ],
@@ -79,5 +85,4 @@ class ChatBox extends StatelessWidget {
       ),
     );
   }
-
 }

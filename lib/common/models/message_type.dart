@@ -6,6 +6,7 @@ enum MessageType {
   video,
   gif,
 }
+
 Widget buildMessageContent(MessageType messageType, BuildContext context) {
   switch (messageType) {
     case MessageType.text:
