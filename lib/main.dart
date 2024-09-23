@@ -56,7 +56,6 @@ class MyApp extends ConsumerWidget {
       initialRoute: Routes.splashScreen,
       routes: {
         Routes.splashScreen: (context) => const AnimatedSplashScreen(),
-        
         Routes.addFriendScreen: (context) => Container(),
         Routes.authenticationScreen: (context) => Container(),
         Routes.loginScreen: (context) => const LoginScreen(),

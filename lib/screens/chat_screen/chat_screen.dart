@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'message_type.dart';
-import 'chat_model.dart';
+
+import '../../common/models/chat_model.dart';
+import '../../common/models/message_type.dart';
+
 class ChatScreen extends StatelessWidget {
   final List<Chat> chats;
 
@@ -50,74 +52,70 @@ class ChatScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
+      body: ListView.builder(
         padding: const EdgeInsets.all(10),
-        child: ListView.builder(
-          itemCount: chats.length,
-          itemBuilder: (context, index) {
-            final chat = chats[index];
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  leading: Stack(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage(chat.profileImageUrl),
-                        radius: 25,
-                      ),
-                      Positioned(
-                        bottom: 2,
-                        right: 2,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 6,
-                          child: CircleAvatar(
-                            radius: 5,
-                            backgroundColor: chat.isOnline
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
+        itemCount: chats.length,
+        itemBuilder: (context, index) {
+          final chat = chats[index];
+          return Container(
+            padding: const EdgeInsets.all(10),
+            height: 80,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: ListTile(
+              leading: Stack(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage(chat.profileImageUrl),
+                    radius: 25,
                   ),
-                  title: Text(
-                    chat.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: _buildMessageContent(chat.message),
-                  trailing: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        DateFormat.Hm().format(chat.time),
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                  Positioned(
+                    bottom: 2,
+                    right: 2,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 6,
+                      child: CircleAvatar(
+                        radius: 5,
+                        backgroundColor: chat.isOnline
+                            ? Colors.green
+                            : Colors.grey,
                       ),
-                      Spacer(flex: 1),
-                      if (chat.unreadCount > 0)
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Color(0xFF703eff),
-                          child: Text(
-                            chat.unreadCount.toString(),
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                      Spacer(flex: 1),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            );
-          },
-        ),
+              title: Text(
+                chat.name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: _buildMessageContent(chat.message),
+              trailing: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat.Hm().format(chat.time),
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  Spacer(flex: 1),
+                  if (chat.unreadCount > 0)
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Color(0xFF703eff),
+                      child: Text(
+                        chat.unreadCount.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  Spacer(flex: 1),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }}

@@ -25,7 +25,7 @@ List<Chat> chatList = [
     message: MessageType.text,
     time: DateTime.now(),
     unreadCount: 0,
-    profileImageUrl: 'images/welcome (1).png',
+    profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
   ),
   Chat(
@@ -33,7 +33,7 @@ List<Chat> chatList = [
     message: MessageType.gif,
     time: DateTime.now(),
     unreadCount: 2,
-    profileImageUrl: 'images/welcome (1).png',
+    profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: false,
   ),
   Chat(
@@ -41,7 +41,7 @@ List<Chat> chatList = [
     message: MessageType.video,
     time: DateTime.now(),
     unreadCount: 2,
-    profileImageUrl: 'images/welcome (1).png',
+    profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
   ),
   Chat(
@@ -49,7 +49,7 @@ List<Chat> chatList = [
     message: MessageType.audio,
     time: DateTime.now(),
     unreadCount: 2,
-    profileImageUrl: 'images/welcome (1).png',
+    profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: false,
   ),
   Chat(
@@ -57,7 +57,7 @@ List<Chat> chatList = [
     message: MessageType.image,
     time: DateTime.now(),
     unreadCount: 2,
-    profileImageUrl: 'images/welcome (1).png',
+    profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
   ),
 ];
