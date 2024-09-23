@@ -7,7 +7,7 @@ class ChatsAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       title: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -16,14 +16,14 @@ class ChatsAppBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
                 child: TextField(
                   showCursor: false,
                   decoration: InputDecoration(
                     hintText: 'Search message...',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                    prefixIcon: Icon(Icons.search, color:Theme.of(context).colorScheme.onSurface),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 10),
                   ),
@@ -33,11 +33,11 @@ class ChatsAppBar extends StatelessWidget {
             const SizedBox(width: 10),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                icon: Icon(Icons.edit_square, color: Colors.grey),
+                icon: Icon(Icons.edit_square, color: Theme.of(context).colorScheme.onSurface),
                 onPressed: () {},
               ),
             ),
