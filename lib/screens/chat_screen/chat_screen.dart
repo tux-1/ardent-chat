@@ -1,7 +1,7 @@
+import 'cubit/chats_state.dart';
 import 'widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../common/models/chat_model.dart';
 import 'widgets/chat_box.dart';
 import 'cubit/chats_cubit.dart';
 
@@ -16,15 +16,22 @@ class ChatScreen extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(10),
-            child: BlocBuilder<ChatsCubit, List<Chat>>(
-              builder: (context, chats) {
-                List<Widget> chatWidgets = chats.map((chat) {
-                  return ChatBox(chat: chat);
-                }).toList();
-                return ListView.builder(
-                  itemCount: chatWidgets.length,
-                  itemBuilder: (context, index) => chatWidgets[index],
-                );
+            child: BlocBuilder<ChatsCubit, ChatsState>(
+              builder: (context, state) {
+                if (state.status == RequestStatus.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state.status == RequestStatus.loaded) {
+                  return ListView.builder(
+                    itemCount: state.chats.length,
+                    itemBuilder: (context, index) {
+                      return ChatBox(chat: state.chats[index]);
+                    },
+                  );
+                } else if (state.status == RequestStatus.error) {
+                  return const Center(child: Text('Failed to load chats'));
+                } else {
+                  return const Center(child: Text('No chats available'));
+                }
               },
             ),
           ),
