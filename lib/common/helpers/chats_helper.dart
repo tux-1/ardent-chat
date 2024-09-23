@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart';
 import '../models/chat_model.dart';
 import '../models/message_type.dart';
 
-/// Global constant to access the data stored in our `FirebaseFirestore`
-class FirestoreHelper {
+/// Global constant to access the chats data stored in our `FirebaseFirestore`
+class ChatsHelper {
   /// Static function to return a stream of chats
   static Stream<List<Chat>> getChatsStream() {
     final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -104,8 +104,7 @@ class FirestoreHelper {
       // Step 2: Prepare the message data for Firestore
       final messageData = {
         'senderId': currentUser?.uid, // Dynamically set sender ID
-        'text':
-            text, // Text for text messages, can be empty if it's purely an attachment
+        'text': text,
         'messageType': messageType
             .index, // Store message type (e.g., text, image, video, etc.)
         'attachmentUrl': attachmentUrl, // Add attachment URL if any
