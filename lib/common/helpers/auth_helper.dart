@@ -45,13 +45,13 @@ class AuthHelper {
   }) async {
     try {
       final navigator = Navigator.of(context);
-      // Step 1: Check if the username already exists
+      // Step 1: Check if the username already exists (case-insensitive)
       final usernameQuery = await FirebaseFirestore.instance
           .collection('users')
-          .where('username', isEqualTo: username)
+          .where('username', isEqualTo: username.toLowerCase())
           .get();
 
-      // If the query returns any documents, the username is already taken
+      // Check if any documents exist
       if (usernameQuery.docs.isNotEmpty) {
         throw ErrorDescription('Username is already taken.');
       }
@@ -71,7 +71,7 @@ class AuthHelper {
           .doc(userCredential.user?.uid)
           .set({
         'email': email,
-        'username': username,
+        'username': username.toLowerCase(),
       });
       navigator.pushReplacementNamed(Routes.verifyAuthenticationScreen);
     } on FirebaseAuthException catch (error) {

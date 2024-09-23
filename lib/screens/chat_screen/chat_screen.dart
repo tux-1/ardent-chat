@@ -79,9 +79,8 @@ class ChatScreen extends StatelessWidget {
                       radius: 6,
                       child: CircleAvatar(
                         radius: 5,
-                        backgroundColor: chat.isOnline
-                            ? Colors.green
-                            : Colors.grey,
+                        backgroundColor:
+                            chat.isOnline ? Colors.green : Colors.grey,
                       ),
                     ),
                   ),
@@ -92,12 +91,12 @@ class ChatScreen extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
                 overflow: TextOverflow.ellipsis,
               ),
-              subtitle: _buildMessageContent(chat.message),
+              subtitle: _buildMessageContent(chat.messageType),
               trailing: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.Hm().format(chat.time),
+                    DateFormat.Hm().format(chat.time.toDate()),
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   Spacer(flex: 1),
@@ -118,12 +117,8 @@ class ChatScreen extends StatelessWidget {
         },
       ),
     );
-  }}
-
-
-
-
-
+  }
+}
 
 Widget _buildMessageContent(MessageType messageType) {
   switch (messageType) {

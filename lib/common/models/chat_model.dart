@@ -1,17 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'message_type.dart';
 
 class Chat {
   final String name;
-  final MessageType message;
-  final DateTime time;
+  final MessageType messageType;
+  final Timestamp time;
   final int unreadCount;
   final String profileImageUrl;
   final bool isOnline;
 
   Chat({
     required this.name,
-    required this.message,
+    required this.messageType,
     required this.time,
     required this.unreadCount,
     required this.profileImageUrl,
@@ -22,40 +23,40 @@ class Chat {
 List<Chat> chatList = [
   Chat(
     name: 'Sebastian Rudiger',
-    message: MessageType.text,
-    time: DateTime.now(),
+    messageType: MessageType.text,
+    time: Timestamp.now(),
     unreadCount: 0,
     profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
   ),
   Chat(
     name: 'Caroline Varsaha',
-    message: MessageType.gif,
-    time: DateTime.now(),
+    messageType: MessageType.gif,
+    time: Timestamp.now(),
     unreadCount: 2,
     profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: false,
   ),
   Chat(
     name: 'Caroline Varsaha',
-    message: MessageType.video,
-    time: DateTime.now(),
+    messageType: MessageType.video,
+    time: Timestamp.now(),
     unreadCount: 2,
     profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
   ),
   Chat(
     name: 'Caroline Varsaha',
-    message: MessageType.audio,
-    time: DateTime.now(),
+    messageType: MessageType.audio,
+    time: Timestamp.now(),
     unreadCount: 2,
     profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: false,
   ),
   Chat(
     name: 'Caroline Varsaha',
-    message: MessageType.image,
-    time: DateTime.now(),
+    messageType: MessageType.image,
+    time: Timestamp.now(),
     unreadCount: 2,
     profileImageUrl: 'assets/images/welcome (1).png',
     isOnline: true,
