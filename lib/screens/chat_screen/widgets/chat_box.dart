@@ -16,10 +16,7 @@ class ChatBox extends StatelessWidget {
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme
-              .of(context)
-              .colorScheme
-              .surface,
+          color: Theme.of(context).colorScheme.surface,
         ),
         child: ListTile(
           leading: Stack(
@@ -44,37 +41,28 @@ class ChatBox extends StatelessWidget {
           ),
           title: Text(
             chat.name,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),
-          subtitle: buildMessageContent(chat.message, context),
+          subtitle: _buildMessageContent(chat.message, context),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 DateFormat.Hm().format(chat.time),
                 style: TextStyle(
-                  color: Theme
-                      .of(context)
-                      .colorScheme
-                      .onSurface,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 12,
                 ),
               ),
               if (chat.unreadCount > 0)
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor: Theme
-                      .of(context)
-                      .colorScheme
-                      .primary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Text(
                     chat.unreadCount.toString(),
                     style: TextStyle(
-                      color: Theme
-                          .of(context)
-                          .colorScheme
-                          .onPrimary,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 12,
                     ),
                   ),
@@ -84,5 +72,55 @@ class ChatBox extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildMessageContent(MessageType messageType, BuildContext context) {
+    switch (messageType) {
+      case MessageType.text:
+        return Text(
+          'This is a text message that will not overflow',
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        );
+      case MessageType.image:
+        return Row(
+          children: [
+            Icon(Icons.image, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Image'),
+          ],
+        );
+      case MessageType.audio:
+        return Row(
+          children: [
+            Icon(Icons.audiotrack,
+                color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Audio'),
+          ],
+        );
+      case MessageType.video:
+        return Row(
+          children: [
+            Icon(Icons.videocam,
+                color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Video'),
+          ],
+        );
+      case MessageType.gif:
+        return Row(
+          children: [
+            Icon(Icons.gif, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('GIF'),
+          ],
+        );
+      default:
+        return const Text(
+          'Unknown Message Type',
+          overflow: TextOverflow.ellipsis,
+        );
+    }
   }
 }

@@ -1,3 +1,4 @@
+import '../../common/models/request_status.dart';
 import 'cubit/chats_state.dart';
 import 'widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -14,26 +15,47 @@ class ChatScreen extends StatelessWidget {
       children: [
         const ChatsAppBar(),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: BlocBuilder<ChatsCubit, ChatsState>(
-              builder: (context, state) {
-                if (state.status == RequestStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state.status == RequestStatus.loaded) {
+          child: BlocBuilder<ChatsCubit, ChatsState>(
+            builder: (context, state) {
+              switch (state.status) {
+                case RequestStatus.initial:
                   return ListView.builder(
+                    padding: const EdgeInsets.all(10),
                     itemCount: state.chats.length,
                     itemBuilder: (context, index) {
                       return ChatBox(chat: state.chats[index]);
                     },
                   );
-                } else if (state.status == RequestStatus.error) {
+
+                case RequestStatus.loading:
+                  return Column(
+                    children: [
+                      const CircularProgressIndicator(),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: state.chats.length,
+                          itemBuilder: (context, index) {
+                            return ChatBox(chat: state.chats[index]);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+
+                case RequestStatus.loaded:
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(10),
+                    itemCount: state.chats.length,
+                    itemBuilder: (context, index) {
+                      return ChatBox(chat: state.chats[index]);
+                    },
+                  );
+
+                case RequestStatus.error:
                   return const Center(child: Text('Failed to load chats'));
-                } else {
-                  return const Center(child: Text('No chats available'));
-                }
-              },
-            ),
+              }
+            },
           ),
         ),
       ],
