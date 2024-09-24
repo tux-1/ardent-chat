@@ -7,42 +7,39 @@ class ChatsAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[100],
-      title: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: TextField(
-                  showCursor: false,
-                  decoration: InputDecoration(
-                    hintText: 'Search message...',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Container(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      title: Row(
+        children: [
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).colorScheme.surface,
               ),
-              child: IconButton(
-                icon: Icon(Icons.edit_square, color: Colors.grey),
-                onPressed: () {},
+              child: TextField(
+                showCursor: false,
+                decoration: InputDecoration(
+                  hintText: 'Search message...',
+                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  prefixIcon: Icon(Icons.search, color:Theme.of(context).colorScheme.onSurface),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.notifications, color: Theme.of(context).colorScheme.onSurface),
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
     );
   }
