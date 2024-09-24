@@ -6,40 +6,41 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/chat_model.dart';
+import '../models/contact.dart';
 import '../models/message_type.dart';
 
 /// Global constant to access the chats data stored in our `FirebaseFirestore`
 class ChatsHelper {
-  /// Static function to return a stream of chats
+  static Future<Contact> _getContactData(String userId) async {
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final data = userDoc.data() ?? {};
+
+    return Contact(
+      name: data['name'] ?? 'Unknown',
+      profileImageUrl: data['profileImageUrl'] ?? '',
+      isOnline: data['isOnline'] ?? false,
+    );
+  }
+
   static Stream<List<Chat>> getChatsStream() {
     final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     return FirebaseFirestore.instance
         .collection('chats')
-        .where(
-          'participants',
-          arrayContains: currentUserId,
-        ) // Get chats where current user is a participant
+        .where('participants', arrayContains: currentUserId)
         .snapshots()
         .asyncMap((querySnapshot) async {
       return await Future.wait(querySnapshot.docs.map((doc) async {
         final chatData = doc.data();
 
-        // Get the other participant's ID (assuming 1-to-1 chat, otherwise adjust accordingly)
-        final List<dynamic> participants = chatData['participants'] ?? [];
-        final String otherParticipantId = participants
+        // Get the other participant's ID
+        final participants = List<String>.from(chatData['participants'] ?? []);
+        final otherParticipantId = participants
             .firstWhere((id) => id != currentUserId, orElse: () => '');
 
-        // Retrieve the other participant's profile information from Firestore
-        final otherUserDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(otherParticipantId)
-            .get();
-
-        final String otherUserProfileImageUrl =
-            otherUserDoc.data()?['profileImageUrl'] ?? '';
-        final bool otherUserIsOnline =
-            otherUserDoc.data()?['isOnline'] ?? false;
+        // Fetch other participant's contact data
+        final Contact contact = await _getContactData(otherParticipantId);
 
         // Fetch the last message from the messages collection
         final lastMessageQuery = await doc.reference
@@ -47,33 +48,29 @@ class ChatsHelper {
             .orderBy('time', descending: true)
             .limit(1)
             .get();
-
         final lastMessageData = lastMessageQuery.docs.isNotEmpty
             ? lastMessageQuery.docs.first.data()
             : null;
 
-        // Determine message type and time from the last message
+        // Message information
         final MessageType lastMessageType = lastMessageData != null
             ? MessageType.values[lastMessageData['messageType'] ?? 0]
             : MessageType.text;
-        final Timestamp lastMessageTime = lastMessageData != null
-            ? lastMessageData['time'] as Timestamp
-            : Timestamp.now();
+        final String lastMessageText = lastMessageData?['text'] ?? '';
+        final Timestamp lastMessageTime =
+            lastMessageData?['time'] ?? Timestamp.now();
 
-        // Calculate unread count by checking the 'seenBy' field
+        // Determine unread count
         final List<dynamic> seenBy = chatData['seenBy'] ?? [];
         final int unreadCount = seenBy.contains(currentUserId) ? 0 : 1;
 
-        // Build the Chat object
+        // Return the Chat object with the Contact instance
         return Chat(
-          name: otherUserDoc.data()?['name'] ??
-              'Unknown', // Use other participant's name
+          contact: contact,
           messageType: lastMessageType,
+          text: lastMessageText,
           time: lastMessageTime,
-          profileImageUrl:
-              otherUserProfileImageUrl, // Profile picture of other participant
-          isOnline: otherUserIsOnline, // Online status of other participant
-          unreadCount: unreadCount, // Calculated locally
+          unreadCount: unreadCount,
         );
       }).toList());
     });

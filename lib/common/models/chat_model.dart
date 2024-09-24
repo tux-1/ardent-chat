@@ -1,64 +1,25 @@
+import 'package:ardent_chat/common/models/contact.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'message_type.dart';
 
 class Chat {
-  final String name;
+  // Other contact's data
+  final Contact contact;
+
+  // Message related data
   final MessageType messageType;
-  final Timestamp time;
+  final String text;
   final int unreadCount;
-  final String profileImageUrl;
-  final bool isOnline;
+  final Timestamp time;
 
   Chat({
-    required this.name,
+    required this.contact,
     required this.messageType,
+    required this.text,
     required this.time,
     required this.unreadCount,
-    required this.profileImageUrl,
-    required this.isOnline,
   });
 }
 
-List<Chat> chatList = [
-  Chat(
-    name: 'Sebastian Rudiger',
-    messageType: MessageType.text,
-    time: Timestamp.now(),
-    unreadCount: 0,
-    profileImageUrl: 'assets/images/welcome (1).png',
-    isOnline: true,
-  ),
-  Chat(
-    name: 'Caroline Varsaha',
-    messageType: MessageType.gif,
-    time: Timestamp.now(),
-    unreadCount: 2,
-    profileImageUrl: 'assets/images/welcome (1).png',
-    isOnline: false,
-  ),
-  Chat(
-    name: 'Caroline Varsaha',
-    messageType: MessageType.video,
-    time: Timestamp.now(),
-    unreadCount: 2,
-    profileImageUrl: 'assets/images/welcome (1).png',
-    isOnline: true,
-  ),
-  Chat(
-    name: 'Caroline Varsaha',
-    messageType: MessageType.audio,
-    time: Timestamp.now(),
-    unreadCount: 2,
-    profileImageUrl: 'assets/images/welcome (1).png',
-    isOnline: false,
-  ),
-  Chat(
-    name: 'Caroline Varsaha',
-    messageType: MessageType.image,
-    time: Timestamp.now(),
-    unreadCount: 2,
-    profileImageUrl: 'assets/images/welcome (1).png',
-    isOnline: true,
-  ),
-];
+
