@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ChatsAppBar extends StatelessWidget {
@@ -11,17 +10,18 @@ class ChatsAppBar extends StatelessWidget {
       title: Row(
         children: [
           Expanded(
-            child: Container(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).colorScheme.surface,
               ),
               child: TextField(
-                showCursor: false,
                 decoration: InputDecoration(
                   hintText: 'Search message...',
-                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                  prefixIcon: Icon(Icons.search, color:Theme.of(context).colorScheme.onSurface),
+                  hintStyle:
+                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  prefixIcon: Icon(Icons.search,
+                      color: Theme.of(context).colorScheme.onSurface),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 ),
@@ -29,13 +29,14 @@ class ChatsAppBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Container(
+          DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
-              icon: Icon(Icons.notifications, color: Theme.of(context).colorScheme.onSurface),
+              icon: Icon(Icons.notifications,
+                  color: Theme.of(context).colorScheme.onSurface),
               onPressed: () {},
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/chat_model.dart';
 import '../models/contact.dart';
@@ -17,7 +18,7 @@ class ChatsHelper {
     final data = userDoc.data() ?? {};
 
     return Contact(
-      name: data['name'] ?? 'Unknown',
+      name: data['username'] ?? 'Unknown',
       profileImageUrl: data['profileImageUrl'] ?? '',
       isOnline: data['isOnline'] ?? false,
     );
@@ -30,8 +31,10 @@ class ChatsHelper {
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
         .snapshots()
-        .asyncMap((querySnapshot) async {
-      return await Future.wait(querySnapshot.docs.map((doc) async {
+        .switchMap((querySnapshot) {
+      // For each chat document, listen to its messages and combine into a list
+      final List<Stream<Chat>> chatStreams =
+          querySnapshot.docs.map((doc) async* {
         final chatData = doc.data();
 
         // Get the other participant's ID
@@ -42,29 +45,47 @@ class ChatsHelper {
         // Fetch other participant's contact data
         final Contact contact = await _getContactData(otherParticipantId);
 
-        // Fetch the last message from the messages collection
-        final lastMessageQuery = await doc.reference
-            .collection('messages')
-            .orderBy('time', descending: true)
-            .limit(1)
-            .get();
-        final lastMessageData = lastMessageQuery.docs.isNotEmpty
-            ? lastMessageQuery.docs.first.data()
-            : null;
+        // Now we need to subscribe to changes in the messages sub-collection
+        yield* _listenToLastMessage(doc, contact, currentUserId);
+      }).toList();
+
+      // Combine all streams into a single Stream<List<Chat>>
+      return CombineLatestStream.list(chatStreams);
+    });
+  }
+
+  static Stream<Chat> _listenToLastMessage(
+      DocumentSnapshot<Map<String, dynamic>> doc,
+      Contact contact,
+      String currentUserId) {
+    return doc.reference
+        .collection('messages')
+        .orderBy('time', descending: true)
+        .limit(1)
+        .snapshots()
+        .asyncMap((messageSnapshot) async {
+      if (messageSnapshot.docs.isNotEmpty) {
+        final lastMessageData = messageSnapshot.docs.first.data();
 
         // Message information
-        final MessageType lastMessageType = lastMessageData != null
-            ? MessageType.values[lastMessageData['messageType'] ?? 0]
-            : MessageType.text;
-        final String lastMessageText = lastMessageData?['text'] ?? '';
+        final MessageType lastMessageType =
+            MessageType.values[lastMessageData['messageType'] ?? 0];
+        final String lastMessageText = lastMessageData['text'] ?? '';
         final Timestamp lastMessageTime =
-            lastMessageData?['time'] ?? Timestamp.now();
+            lastMessageData['time'] ?? Timestamp.now();
 
-        // Determine unread count
-        final List<dynamic> seenBy = chatData['seenBy'] ?? [];
-        final int unreadCount = seenBy.contains(currentUserId) ? 0 : 1;
+        // Fetch all messages and filter those not seen by the current user
+        final allMessagesQuery =
+            await doc.reference.collection('messages').get();
+        final unreadMessages = allMessagesQuery.docs.where((messageDoc) {
+          final seenBy = List<String>.from(messageDoc.data()['seenBy'] ?? []);
+          return !seenBy.contains(currentUserId);
+        }).toList();
 
-        // Return the Chat object with the Contact instance
+        // Determine unread count by counting the filtered messages
+        final int unreadCount = unreadMessages.length;
+
+        // Return the updated Chat object with the contact info and unread count
         return Chat(
           contact: contact,
           messageType: lastMessageType,
@@ -72,7 +93,16 @@ class ChatsHelper {
           time: lastMessageTime,
           unreadCount: unreadCount,
         );
-      }).toList());
+      } else {
+        // Handle case where no messages are found
+        return Chat(
+          contact: contact,
+          messageType: MessageType.text,
+          text: '',
+          time: Timestamp.now(),
+          unreadCount: 0,
+        );
+      }
     });
   }
 

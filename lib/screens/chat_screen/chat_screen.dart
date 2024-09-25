@@ -30,7 +30,7 @@ class ChatScreen extends StatelessWidget {
                 case RequestStatus.loading:
                   return Column(
                     children: [
-                      const CircularProgressIndicator(),
+                      const LinearProgressIndicator(),
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.all(10),
@@ -58,6 +58,7 @@ class ChatScreen extends StatelessWidget {
             },
           ),
         ),
+      
       ],
     );
   }

@@ -42,6 +42,7 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: null
   ionicons: ^0.2.2
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_lints: ^3.0.0

@@ -12,6 +12,7 @@ class Chat {
   final String text;
   final int unreadCount;
   final Timestamp time;
+  // attachment ??
 
   Chat({
     required this.contact,

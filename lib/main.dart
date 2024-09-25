@@ -53,29 +53,26 @@ class MyApp extends ConsumerWidget {
       providers: [
         BlocProvider<ChatsCubit>(create: (_) => ChatsCubit()),
       ],
-
-
-
-    child: MaterialApp(
-      title: 'Ardent Chat',
-      themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
-      theme: kLightTheme,
-      darkTheme: kDarkTheme,
-      debugShowCheckedModeBanner: false,
-      initialRoute: Routes.homeScreen,
-      routes: {
-        Routes.splashScreen: (context) => const AnimatedSplashScreen(),
-        Routes.addFriendScreen: (context) => Container(),
-        Routes.authenticationScreen: (context) => Container(),
-        Routes.loginScreen: (context) => const LoginScreen(),
-        Routes.signUpScreen: (context) => const SignUpScreen(),
-        // Routes.homeScreen: (context) => const HomeScreen(),
-        Routes.homeScreen: (context) => const HomeScreen(),
-        Routes.onBoardingScreen: (context) => const OnboardingScreen(),
-        Routes.verifyAuthenticationScreen: (context) => const VerificationScreen(),
-      },
-    ),
+      child: MaterialApp(
+        title: 'Ardent Chat',
+        themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
+        theme: kLightTheme,
+        darkTheme: kDarkTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.homeScreen,
+        routes: {
+          Routes.splashScreen: (context) => const AnimatedSplashScreen(),
+          Routes.addFriendScreen: (context) => Container(),
+          Routes.authenticationScreen: (context) => Container(),
+          Routes.loginScreen: (context) => const LoginScreen(),
+          Routes.signUpScreen: (context) => const SignUpScreen(),
+          // Routes.homeScreen: (context) => const HomeScreen(),
+          Routes.homeScreen: (context) => const HomeScreen(),
+          Routes.onBoardingScreen: (context) => const OnboardingScreen(),
+          Routes.verifyAuthenticationScreen: (context) =>
+              const VerificationScreen(),
+        },
+      ),
     );
-
   }
 }
