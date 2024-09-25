@@ -59,14 +59,13 @@ class MyApp extends ConsumerWidget {
         theme: kLightTheme,
         darkTheme: kDarkTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.homeScreen,
+        initialRoute: Routes.splashScreen,
         routes: {
           Routes.splashScreen: (context) => const AnimatedSplashScreen(),
           Routes.addFriendScreen: (context) => Container(),
           Routes.authenticationScreen: (context) => Container(),
           Routes.loginScreen: (context) => const LoginScreen(),
           Routes.signUpScreen: (context) => const SignUpScreen(),
-          // Routes.homeScreen: (context) => const HomeScreen(),
           Routes.homeScreen: (context) => const HomeScreen(),
           Routes.onBoardingScreen: (context) => const OnboardingScreen(),
           Routes.verifyAuthenticationScreen: (context) =>
