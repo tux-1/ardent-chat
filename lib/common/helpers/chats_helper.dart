@@ -18,6 +18,7 @@ class ChatsHelper {
     final data = userDoc.data() ?? {};
 
     return Contact(
+      id: userId,
       name: data['username'] ?? 'Unknown',
       profileImageUrl: data['profileImageUrl'] ?? '',
       isOnline: data['isOnline'] ?? false,
