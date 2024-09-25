@@ -1,6 +1,7 @@
 import 'package:ardent_chat/common/constants/routes.dart';
 
 import 'package:ardent_chat/common/theme/theme.dart';
+import 'package:ardent_chat/screens/chat_screen/cubit/chats_cubit.dart';
 import 'package:ardent_chat/screens/home_screen/home_screen.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
@@ -9,6 +10,7 @@ import 'package:ardent_chat/screens/verification/verification_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -47,23 +49,30 @@ class MyApp extends ConsumerWidget {
     // If Hive box value is null (not set), use the default Theme.of(context) brightness
     bool finalTheme = themePreference ?? isDarkMode;
 
-    return MaterialApp(
-      title: 'Ardent Chat',
-      themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
-      theme: kLightTheme,
-      darkTheme: kDarkTheme,
-      debugShowCheckedModeBanner: false,
-      initialRoute: Routes.splashScreen,
-      routes: {
-        Routes.splashScreen: (context) => const AnimatedSplashScreen(),
-        Routes.addFriendScreen: (context) => Container(),
-        Routes.authenticationScreen: (context) => Container(),
-        Routes.loginScreen: (context) => const LoginScreen(),
-        Routes.signUpScreen: (context) => const SignUpScreen(),
-        Routes.homeScreen: (context) => const HomeScreen(),
-        Routes.onBoardingScreen: (context) => const OnboardingScreen(),
-        Routes.verifyAuthenticationScreen: (context) => const VerificationScreen(),
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ChatsCubit>(create: (_) => ChatsCubit()),
+      ],
+      child: MaterialApp(
+        title: 'Ardent Chat',
+        themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
+        theme: kLightTheme,
+        darkTheme: kDarkTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.homeScreen,
+        routes: {
+          Routes.splashScreen: (context) => const AnimatedSplashScreen(),
+          Routes.addFriendScreen: (context) => Container(),
+          Routes.authenticationScreen: (context) => Container(),
+          Routes.loginScreen: (context) => const LoginScreen(),
+          Routes.signUpScreen: (context) => const SignUpScreen(),
+          // Routes.homeScreen: (context) => const HomeScreen(),
+          Routes.homeScreen: (context) => const HomeScreen(),
+          Routes.onBoardingScreen: (context) => const OnboardingScreen(),
+          Routes.verifyAuthenticationScreen: (context) =>
+              const VerificationScreen(),
+        },
+      ),
     );
   }
 }

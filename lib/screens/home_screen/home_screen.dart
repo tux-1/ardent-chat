@@ -2,7 +2,6 @@ import 'package:ardent_chat/screens/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../common/models/chat_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,8 +17,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
+
         // TODO: We should call ChatsScreen & Settings Screen
-        ChatScreen(chats: chatList),
+        const ChatScreen(),
         const Center(child: Text("Settings")),
       ][selectedIndex],
 

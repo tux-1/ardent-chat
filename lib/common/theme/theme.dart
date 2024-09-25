@@ -5,7 +5,8 @@ final ThemeData kLightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
     primary: Color(0xFF6e3cfd), // Purple for buttons and accents
-    onPrimary: Colors.white, // White text/icons on primary color
+    primaryContainer: Color(0xFFF5F5F5), // Lighter purple for containers
+    onPrimaryContainer: Color(0xFF333333), // Dark text on primary containers
     secondary: Color(0xFFF5F5F5), // Light grey for background areas
     onSecondary: Color(0xFF333333), // Dark text on secondary elements
     surface: Colors.white, // Surface colors like cards
@@ -19,7 +20,8 @@ final ThemeData kDarkTheme = ThemeData(
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
     primary: Color(0xFF6e3cfd), // Purple for buttons and accents
-    onPrimary: Colors.white, // White text/icons on primary color
+    primaryContainer: Color(0xFF121212), // Darker purple for containers
+    onPrimaryContainer: Color(0xFFF5F5F5), // Light text on dark containers
     secondary: Color(0xFF333333), // Dark grey for background areas
     onSecondary: Color(0xFFF5F5F5), // Light text on dark elements
     surface: Color(0xFF222222), // Dark surface colors
