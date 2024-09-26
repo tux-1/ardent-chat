@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/helpers/auth_helper.dart';
 import '../../common/widgets/theme_switch.dart';
+import '../profile_screen/profile_screen.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -44,6 +45,10 @@ class SettingsPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   ////
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                  );
                 },
                 child: const Text('Edit'),
               ),
@@ -85,7 +90,8 @@ class SettingsPage extends StatelessWidget {
               title: 'Dark Mode',
               trailing: ThemeSwitch(),
             ),
-            const SizedBox(height: 150),
+            const SizedBox(height: 160),
+
             ListTileWidget(
               title: 'Logout',
               trailing: const Icon(
@@ -96,26 +102,6 @@ class SettingsPage extends StatelessWidget {
               onTap: () {
                 AuthHelper.signOut(context);
               },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    AuthHelper.signOut(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ),
             ),
           ],
         ),

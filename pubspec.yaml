@@ -43,7 +43,7 @@ dependencies:
   intl: null
   ionicons: ^0.2.2
   rxdart: ^0.28.0
-
+  image_picker:
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
