@@ -1,3 +1,4 @@
+
 enum MessageType {
   text,
   image,
@@ -5,3 +6,4 @@ enum MessageType {
   video,
   gif,
 }
+
