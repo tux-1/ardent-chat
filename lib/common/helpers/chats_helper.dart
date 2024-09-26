@@ -12,14 +12,14 @@ import '../models/message_type.dart';
 
 /// Global constant to access the chats data stored in our `FirebaseFirestore`
 class ChatsHelper {
-  static Future<Contact> _getContactData(String userId) async {
+  static Future<Contact> getContactData(String userId) async {
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     final data = userDoc.data() ?? {};
 
     return Contact(
       id: userId,
-      name: data['username'] ?? 'Unknown',
+      username: data['username'] ?? 'Unknown',
       profileImageUrl: data['profileImageUrl'] ?? '',
       isOnline: data['isOnline'] ?? false,
     );
@@ -44,7 +44,7 @@ class ChatsHelper {
             .firstWhere((id) => id != currentUserId, orElse: () => '');
 
         // Fetch other participant's contact data
-        final Contact contact = await _getContactData(otherParticipantId);
+        final Contact contact = await getContactData(otherParticipantId);
 
         // Now we need to subscribe to changes in the messages sub-collection
         yield* _listenToLastMessage(doc, contact, currentUserId);

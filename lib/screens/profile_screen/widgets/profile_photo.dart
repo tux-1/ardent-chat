@@ -15,6 +15,7 @@ class ProfilePhoto extends StatelessWidget {
   void _showImagePickerDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      clipBehavior: Clip.hardEdge,
       builder: (context) {
         return SafeArea(
           child: Wrap(

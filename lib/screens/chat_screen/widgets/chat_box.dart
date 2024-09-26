@@ -44,7 +44,7 @@ class ChatBox extends StatelessWidget {
         title: Row(
           children: [
             Text(
-              chat.contact.name,
+              chat.contact.username,
               style: const TextStyle(fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
             ),
