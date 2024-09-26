@@ -1,7 +1,7 @@
 import 'package:ardent_chat/screens/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-
+import '../settings/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,19 +20,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // TODO: We should call ChatsScreen & Settings Screen
         const ChatScreen(),
-        const Center(child: Text("Settings")),
+        const SettingsPage(),
       ][selectedIndex],
 
       // Floating action button
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
           // TODO: We should call Add Friends Screen
         },
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           Icons.add,
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
 
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Container(
         height: 80.0,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(45.0),
             topRight: Radius.circular(45.0),
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(
                 Ionicons.chatbubbles,
                 color: selectedIndex == 0
-                    ? Theme.of(context).primaryColor
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.grey.withOpacity(0.5),
               ),
               onPressed: () {
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(
                 Ionicons.settings_sharp,
                 color: selectedIndex == 1
-                    ? Theme.of(context).primaryColor
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.grey.withOpacity(0.5),
               ),
               onPressed: () {
