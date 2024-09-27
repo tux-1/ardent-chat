@@ -1,6 +1,4 @@
-import 'package:ardent_chat/screens/settings/settings_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/helpers/auth_helper.dart';
 import '../../common/widgets/theme_switch.dart';
 import '../profile_screen/profile_screen.dart';
@@ -47,7 +45,8 @@ class SettingsPage extends StatelessWidget {
                   ////
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileScreen()),
                   );
                 },
                 child: const Text('Edit'),
@@ -90,9 +89,10 @@ class SettingsPage extends StatelessWidget {
               title: 'Dark Mode',
               trailing: ThemeSwitch(),
             ),
-
-            const Divider(height:100,thickness: .5,),
-
+            const Divider(
+              height: 100,
+              thickness: .5,
+            ),
             ListTileWidget(
               title: 'Logout',
               trailing: const Icon(
