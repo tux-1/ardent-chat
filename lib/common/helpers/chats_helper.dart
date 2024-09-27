@@ -21,6 +21,7 @@ class ChatsHelper {
       id: userId,
       username: data['username'] ?? 'Unknown',
       profileImageUrl: data['profileImageUrl'] ?? '',
+      email: data['email'] ?? '',
       isOnline: data['isOnline'] ?? false,
     );
   }

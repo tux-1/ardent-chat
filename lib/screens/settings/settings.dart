@@ -90,7 +90,8 @@ class SettingsPage extends StatelessWidget {
               title: 'Dark Mode',
               trailing: ThemeSwitch(),
             ),
-            const SizedBox(height: 160),
+
+            const Divider(height:100,thickness: .5,),
 
             ListTileWidget(
               title: 'Logout',

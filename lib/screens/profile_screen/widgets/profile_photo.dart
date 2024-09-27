@@ -1,4 +1,4 @@
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,6 +12,7 @@ class ProfilePhoto extends StatelessWidget {
     required this.onImagePicked,
   });
 
+
   void _showImagePickerDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -20,6 +21,12 @@ class ProfilePhoto extends StatelessWidget {
         return SafeArea(
           child: Wrap(
             children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child: Text("Profile photo",
+                        style:TextStyle(fontWeight: FontWeight.bold,fontSize: 20))),
+              ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Gallery'),
@@ -43,17 +50,56 @@ class ProfilePhoto extends StatelessWidget {
     );
   }
 
+
+  void _showFullScreenImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.zero,
+            child: Center(
+              child: profileImage != null
+                  ? Image(image: profileImage!)
+                  : Image.asset('assets/images/anonymous.png'),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showImagePickerDialog(context),
-      child: CircleAvatar(
-        radius: 100,
-        backgroundImage: profileImage ?? const AssetImage('assets/images/welcome.png'),
-        child: profileImage == null
-            ? const Icon(Icons.camera_alt, size: 50)
-            : null,
-      ),
+    return Stack(
+      children: [
+
+        GestureDetector(
+          onTap: () => _showFullScreenImage(context),
+          child: CircleAvatar(
+            radius: 100,
+            backgroundImage: profileImage ?? const AssetImage('assets/images/anonymous.png'),
+
+          ),
+        ),
+
+        Positioned(
+          right: 5,
+          bottom: 5,
+          child: GestureDetector(
+            onTap: () => _showImagePickerDialog(context),
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Icon(Icons.camera_alt_outlined, size: 30,color:Theme.of(context).colorScheme.onPrimary),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
