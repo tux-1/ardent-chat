@@ -15,7 +15,10 @@ class ProfileScreen extends StatelessWidget {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: source);
     if (image != null) {
-      context.read<ProfileCubit>().updateProfileImage(FileImage(File(image.path)));
+      context.read<ProfileCubit>().saveProfileImage(File(image.path));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile photo updated successfully!')),
+      );
     }
   }
 
@@ -43,24 +46,54 @@ class ProfileScreen extends StatelessWidget {
                       ProfilePhoto(
                         profileImage: state.profileImage,
                         onImagePicked: (source) => _pickImage(context, source),
+                        onDeletePhoto: () {
+                          context.read<ProfileCubit>().deleteProfileImage();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Profile photo deleted successfully!')),
+                          );
+                        },
                       ),
                       const SizedBox(height: 50),
                       NameWidget(
-                        nameController: TextEditingController(text: state.name),
-                        onEdit: (name) => context.read<ProfileCubit>().updateName(name),
+                        currentName: state.name,
+                        onNameChanged: (newName) {
+                          context.read<ProfileCubit>().saveName(newName);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Name updated successfully!')),
+                          );
+                        },
                       ),
-                      const Divider(thickness: .3, height: 20, indent: 50),
+                      const Divider(thickness: 0.3, height: 20, indent: 50),
                       EmailWidget(
                         emailController: TextEditingController(text: state.email),
                       ),
                       const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          final newPicture = (state.profileImage as FileImage?)?.file;
-                          context.read<ProfileCubit>().saveProfile(state.name, newPicture);
-                        },
-                        child: const Text('Save'),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     final newPicture = (state.profileImage as FileImage?)?.file;
+                      //     context.read<ProfileCubit>().saveProfile(newName: state.name, newPicture: newPicture);
+                      //     Navigator.pop(context);
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: Theme.of(context).colorScheme.primary,
+                      //     foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      //     padding: const EdgeInsets.symmetric(vertical: 16),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //   ),
+                      //   child: const SizedBox(
+                      //     width: double.infinity,
+                      //     child: Text(
+                      //       'Save',
+                      //       textAlign: TextAlign.center,
+                      //       style: TextStyle(
+                      //         fontSize: 16,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 );

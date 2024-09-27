@@ -4,13 +4,14 @@ import 'package:image_picker/image_picker.dart';
 class ProfilePhoto extends StatelessWidget {
   final ImageProvider<Object>? profileImage;
   final Function(ImageSource) onImagePicked;
+  final Function() onDeletePhoto; // Add a callback for deleting the photo
 
   const ProfilePhoto({
     super.key,
     required this.profileImage,
     required this.onImagePicked,
+    required this.onDeletePhoto, // Include it in the constructor
   });
-
 
   void _showImagePickerDialog(BuildContext context) {
     showModalBottomSheet(
@@ -24,7 +25,7 @@ class ProfilePhoto extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 child: Center(
                     child: Text("Profile photo",
-                        style:TextStyle(fontWeight: FontWeight.bold,fontSize: 20))),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
@@ -42,13 +43,20 @@ class ProfilePhoto extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('Delete Photo'),
+                onTap: () {
+                  onDeletePhoto();
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
           ),
         );
       },
     );
   }
-
 
   void _showFullScreenImage(BuildContext context) {
     showDialog(
@@ -76,16 +84,13 @@ class ProfilePhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-
         GestureDetector(
           onTap: () => _showFullScreenImage(context),
           child: CircleAvatar(
             radius: 100,
             backgroundImage: profileImage ?? const AssetImage('assets/images/anonymous.png'),
-
           ),
         ),
-
         Positioned(
           right: 5,
           bottom: 5,
@@ -94,7 +99,7 @@ class ProfilePhoto extends StatelessWidget {
             child: CircleAvatar(
               radius: 30,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Icon(Icons.camera_alt_outlined, size: 30,color:Theme.of(context).colorScheme.onPrimary),
+              child: Icon(Icons.camera_alt_outlined, size: 30, color: Theme.of(context).colorScheme.onPrimary),
             ),
           ),
         ),

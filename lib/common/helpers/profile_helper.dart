@@ -65,6 +65,22 @@ class ProfileHelper {
     }
   }
 
+  static Future<void> deleteProfileImage() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    // Reference to Firestore user document
+    final userDocRef =
+    FirebaseFirestore.instance.collection('users').doc(userId);
+
+    // Retrieve existing profile data to check for the current profile picture URL
+    final userDoc = await userDocRef.get();
+    String? currentProfileImageUrl = userDoc.data()?['profileImageUrl'];
+
+    if (currentProfileImageUrl != null && currentProfileImageUrl.isNotEmpty) {
+      await _deleteOldProfilePicture(currentProfileImageUrl);
+      await userDocRef.update({'profileImageUrl': FieldValue.delete()});
+    }
+  }
+
   static Future<void> _deleteOldProfilePicture(String imageUrl) async {
     try {
       // Extract the reference path from the URL and delete the file from Firebase Storage

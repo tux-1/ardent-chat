@@ -12,16 +12,19 @@ class EmailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
-          controller: emailController,
-          decoration: const InputDecoration(
-            labelText: 'Email',
-            prefixIcon: Icon(Icons.email_outlined),
-            border: InputBorder.none,
+      child: ListTile(
+        leading: const Icon(Icons.email_outlined),
+        title: TextField(
+            controller: emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
 
-          ),
-          readOnly: true,
+              border: InputBorder.none,
 
+            ),
+            readOnly: true,
+
+        ),
       ),
     );
   }
