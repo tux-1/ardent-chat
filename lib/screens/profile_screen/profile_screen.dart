@@ -37,7 +37,8 @@ class ProfileScreen extends StatelessWidget {
               case ProfileStatus.loading:
                 return const Center(child: CircularProgressIndicator());
               case ProfileStatus.error:
-                return Center(child: Text(state.errorMessage ?? 'Error occurred'));
+                return Center(
+                    child: Text(state.errorMessage ?? 'Error occurred'));
               case ProfileStatus.success:
                 return Padding(
                   padding: const EdgeInsets.all(20),
@@ -49,7 +50,9 @@ class ProfileScreen extends StatelessWidget {
                         onDeletePhoto: () {
                           context.read<ProfileCubit>().deleteProfileImage();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Profile photo deleted successfully!')),
+                            const SnackBar(
+                                content: Text(
+                                    'Profile photo deleted successfully!')),
                           );
                         },
                       ),
@@ -59,13 +62,14 @@ class ProfileScreen extends StatelessWidget {
                         onNameChanged: (newName) {
                           context.read<ProfileCubit>().saveName(newName);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Name updated successfully!')),
+                            const SnackBar(
+                                content: Text('Name updated successfully!')),
                           );
                         },
                       ),
-                      const Divider(thickness: 0.3, height: 20, indent: 50),
+                      const Divider(thickness: 0.3),
                       EmailWidget(
-                        emailController: TextEditingController(text: state.email),
+                        email: state.email,
                       ),
                       const Spacer(),
                       // ElevatedButton(

@@ -90,7 +90,7 @@ class SettingsPage extends StatelessWidget {
               trailing: ThemeSwitch(),
             ),
             const Divider(
-              height: 100,
+              height: 30,
               thickness: .5,
             ),
             ListTileWidget(

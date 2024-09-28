@@ -7,11 +7,11 @@ import 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit()
       : super(ProfileState(
-    name: '',
-    email: '',
-    profileImage: null,
-    status: ProfileStatus.loading,
-  )) {
+          name: '',
+          email: '',
+          profileImage: null,
+          status: ProfileStatus.loading,
+        )) {
     loadProfile();
   }
 
@@ -22,15 +22,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileState(
         name: profile.username,
         email: profile.email,
-        profileImage: NetworkImage(profile.profileImageUrl),
+        profileImage: profile.profileImageUrl.isEmpty
+            ? const AssetImage('assets/images/anonymous.png')
+            : NetworkImage(profile.profileImageUrl),
         status: ProfileStatus.success,
       ));
     } catch (e) {
+      debugPrint(e.toString());
       emit(state.copyWith(
           status: ProfileStatus.error, errorMessage: 'Failed to load profile'));
     }
   }
-
 
   Future<void> saveName(String newName) async {
     try {
@@ -51,7 +53,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-
   Future<void> saveProfileImage(File? newPicture) async {
     try {
       emit(state.copyWith(status: ProfileStatus.loading));
@@ -70,7 +71,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       ));
     }
   }
-
 
   Future<void> deleteProfileImage() async {
     try {
