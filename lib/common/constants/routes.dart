@@ -7,4 +7,5 @@ class Routes {
   static const homeScreen = 'homeScreen';
   static const addFriendScreen = 'addFriendScreen';
   static const splashScreen = 'splashScreen';
+  static const messagesScreen = 'messagesScreen';
 }

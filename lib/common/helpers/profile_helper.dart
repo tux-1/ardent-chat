@@ -60,7 +60,7 @@ class ProfileHelper {
         throw ErrorDescription('Username is already taken.');
       }
 
-      updatedData['username'] = newUsername;
+      updatedData['username'] = newUsername.toLowerCase();
       await userDocRef.update(updatedData);
     }
   }
