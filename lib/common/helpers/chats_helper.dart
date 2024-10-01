@@ -34,6 +34,11 @@ class ChatsHelper {
         .where('participants', arrayContains: currentUserId)
         .snapshots()
         .switchMap((querySnapshot) {
+      // If there are no chat documents, return an empty list
+      if (querySnapshot.docs.isEmpty) {
+        return Stream.value([]); // Emit an empty list
+      }
+
       // For each chat document, listen to its messages and combine into a list
       final List<Stream<Chat>> chatStreams =
           querySnapshot.docs.map((doc) async* {
