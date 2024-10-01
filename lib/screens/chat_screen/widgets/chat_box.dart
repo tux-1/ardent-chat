@@ -1,8 +1,8 @@
 import 'package:ardent_chat/common/utils/extensions.dart';
 import 'package:flutter/material.dart';
-
 import '../../../common/models/chat_model.dart';
 import '../../../common/models/message_type.dart';
+import 'package:ardent_chat/screens/private_messaging/private_messaging.dart'; // Assuming this imports the MessagesScreen
 
 class ChatBox extends StatelessWidget {
   final Chat chat;
@@ -18,12 +18,24 @@ class ChatBox extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
       ),
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MessagesScreen(
+                profileImageUrl: chat.contact.profileImageUrl,
+                username: chat.contact.username,
+                isOnline: chat.contact.isOnline,
+              ),
+            ),
+          );
+        },
         leading: Stack(
           children: [
             CircleAvatar(
               backgroundImage: chat.contact.profileImageUrl.isEmpty
                   ? const AssetImage('assets/images/welcome (1).png')
-                  : NetworkImage(chat.contact.profileImageUrl),
+                  : NetworkImage(chat.contact.profileImageUrl) as ImageProvider,
               radius: 25,
             ),
             Positioned(
@@ -35,7 +47,7 @@ class ChatBox extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 5,
                   backgroundColor:
-                      chat.contact.isOnline ? Colors.green : Colors.grey,
+                  chat.contact.isOnline ? Colors.green : Colors.grey,
                 ),
               ),
             ),
@@ -67,54 +79,65 @@ class ChatBox extends StatelessWidget {
     );
   }
 
-  Widget _buildMessageContent(
-      {required MessageType messageType,
-      required BuildContext context,
-      required String text}) {
+  Widget _buildMessageContent({
+    required MessageType messageType,
+    required BuildContext context,
+    required String text,
+  }) {
+
+    Widget messageWidget;
+
+    switch (messageType) {
+      case MessageType.text:
+        messageWidget = Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        );
+        break;
+      case MessageType.image:
+        messageWidget = Row(
+          children: [
+            Icon(Icons.image, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Image'),
+          ],
+        );
+        break;
+      case MessageType.audio:
+        messageWidget = Row(
+          children: [
+            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Audio'),
+          ],
+        );
+        break;
+      case MessageType.video:
+        messageWidget = Row(
+          children: [
+            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('Video'),
+          ],
+        );
+        break;
+      case MessageType.gif:
+        messageWidget = Row(
+          children: [
+            Icon(Icons.gif, color: Theme.of(context).colorScheme.onSurface),
+            const SizedBox(width: 5),
+            const Text('GIF'),
+          ],
+        );
+        break;
+      default:
+        messageWidget = const SizedBox();
+    }
+
     return Row(
       children: [
-        Expanded(
-          child: switch (messageType) {
-            MessageType.text => Text(
-                text,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
-              ),
-            MessageType.image => Row(
-                children: [
-                  Icon(Icons.image,
-                      color: Theme.of(context).colorScheme.onSurface),
-                  const SizedBox(width: 5),
-                  const Text('Image'),
-                ],
-              ),
-            MessageType.audio => Row(
-                children: [
-                  Icon(Icons.audiotrack,
-                      color: Theme.of(context).colorScheme.onSurface),
-                  const SizedBox(width: 5),
-                  const Text('Audio'),
-                ],
-              ),
-            MessageType.video => Row(
-                children: [
-                  Icon(Icons.videocam,
-                      color: Theme.of(context).colorScheme.onSurface),
-                  const SizedBox(width: 5),
-                  const Text('Video'),
-                ],
-              ),
-            MessageType.gif => Row(
-                children: [
-                  Icon(Icons.gif,
-                      color: Theme.of(context).colorScheme.onSurface),
-                  const SizedBox(width: 5),
-                  const Text('GIF'),
-                ],
-              ),
-          },
-        ),
+        Expanded(child: messageWidget),
         if (chat.unreadCount > 0)
           CircleAvatar(
             radius: 12,
