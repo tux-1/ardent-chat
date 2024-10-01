@@ -19,38 +19,17 @@ class ChatScreen extends StatelessWidget {
             builder: (context, state) {
               switch (state.status) {
                 case RequestStatus.initial:
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    itemCount: state.chats.length,
-                    itemBuilder: (context, index) {
-                      return ChatBox(chat: state.chats[index]);
-                    },
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
 
                 case RequestStatus.loading:
-                  return Column(
-                    children: [
-                      const LinearProgressIndicator(),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(10),
-                          itemCount: state.chats.length,
-                          itemBuilder: (context, index) {
-                            return ChatBox(chat: state.chats[index]);
-                          },
-                        ),
-                      ),
-                    ],
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
 
                 case RequestStatus.loaded:
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    itemCount: state.chats.length,
-                    itemBuilder: (context, index) {
-                      return ChatBox(chat: state.chats[index]);
-                    },
-                  );
+                  return _ChatList(state);
 
                 case RequestStatus.error:
                   return const Center(child: Text('Failed to load chats'));
@@ -58,8 +37,21 @@ class ChatScreen extends StatelessWidget {
             },
           ),
         ),
-      
       ],
+    );
+  }
+
+  Widget _ChatList(ChatsState state) {
+    if (state.chats.isEmpty) {
+      return const Center(child: Text('No chats available'));
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(10),
+      itemCount: state.chats.length,
+      itemBuilder: (context, index) {
+        return ChatBox(chat: state.chats[index]);
+      },
     );
   }
 }
