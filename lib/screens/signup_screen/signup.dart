@@ -22,7 +22,98 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  bool rememberUser = false;
+
+// manage button state for enabled and disable btn
+  bool _isButtonEnabled = false;
+  bool _isLoading = false;
+
   final _formKey = GlobalKey<FormState>();
+  Future<void> _signUp() async {
+    setState(() {
+      _isLoading = true; // Set loading to true
+    });
+
+    // try {
+    //   // Call the sign-up method
+    //   await AuthHelper.signUp(
+    //     username: usernameController.text,
+    //     email: emailController.text,
+    //     password: passwordController.text,
+    //     context: context,
+    //   );
+    //   // Handle success (e.g., navigate to another screen)
+    // } catch (error) {
+    //   // Handle errors (e.g., show a message to the user)
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Sign up failed: $error')),
+    //   );
+    // } finally {
+    //   setState(() {
+    //     _isLoading = false; // Set loading back to false
+    //   });
+    // }
+
+    try {
+      // Simulate a network request or sign-up process
+      await AuthHelper.signUp(
+          username: usernameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+          context: context);
+
+      // Show success SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Sign-up successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Do something after  success navigate to another screen
+    } catch (error) {
+      //  show failure SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign-up failed: ${error.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      // Stop loading spinner
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Listen for changes in the text fields to make btn enabled
+    usernameController.addListener(_updateButtonState);
+    emailController.addListener(_updateButtonState);
+    passwordController.addListener(_updateButtonState);
+    confirmPasswordController.addListener(_updateButtonState);
+  }
+
+  void _updateButtonState() {
+    setState(() {
+      _isButtonEnabled = usernameController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          confirmPasswordController.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     darkBlueColor = const Color(0xFF090057);
 
     return Scaffold(
-      backgroundColor: myColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -91,7 +182,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               Text("Create Account",
                   style: TextStyle(
-                    color: darkBlueColor,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context)
+                            .colorScheme
+                            .onPrimary // White in dark mode
+                        : darkBlueColor,
                     fontSize: 32,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w700,
@@ -140,7 +235,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Text(
                       "Already have an account?   ",
                       style: TextStyle(
-                        color: darkBlueColor,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Theme.of(context)
+                                .colorScheme
+                                .onPrimary // White in dark mode
+                            : darkBlueColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Quicksand",
                       ),
@@ -153,7 +252,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Text(
                         "Log in",
                         style: TextStyle(
-                          color: darkBlueColor,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary // White in dark mode
+                              : darkBlueColor,
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w700,
                         ),
@@ -182,35 +285,84 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildSignUpButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          AuthHelper.signUp(
-            username: usernameController.text,
-            email: emailController.text,
-            password: passwordController.text,
-            context: context,
-          ).onError(
-            (error, stackTrace) {
-              
-            },
-          );
-        }
-      },
+      // onPressed: () {
+      //   if (_formKey.currentState?.validate() ?? false) {
+      //     AuthHelper.signUp(
+      //       username: usernameController.text,
+      //       email: emailController.text,
+      //       password: passwordController.text,
+      //       context: context,
+      //     ).onError(
+      //       (error, stackTrace) {},
+      //     );
+      //   }
+      // },
+
+      // enabled
+      // onPressed: _isButtonEnabled
+      //     ? () {
+      //         if (_formKey.currentState?.validate() ?? false) {
+      //           AuthHelper.signUp(
+      //             username: usernameController.text,
+      //             email: emailController.text,
+      //             password: passwordController.text,
+      //             context: context,
+      //           ).onError(
+      //             (error, stackTrace) {},
+      //           );
+      //         }
+      //       }
+      //     : null,
+
+      //works with buuton enabled and loadin indicator
+      // onPressed: _isButtonEnabled && !_isLoading
+      //     ? () {
+      //         if (_formKey.currentState?.validate() ?? false) {
+      //           _signUp(); // Call the sign-up function
+      //         }
+      //       }
+      //     : null,
+
+      // style: ElevatedButton.styleFrom(
+      //   shape: const StadiumBorder(),
+      //   elevation: 10,
+      //   shadowColor: myColor,
+      //   backgroundColor: myColor,
+      //   minimumSize: const Size.fromHeight(60),
+      // ),
+      // child: _isLoading
+      //     ? const CircularProgressIndicator(
+      //         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      //       )
+      onPressed: _isButtonEnabled && !_isLoading
+          ? () {
+              if (_formKey.currentState?.validate() ?? false) {
+                _signUp();
+              }
+            }
+          : null, // Button is disabled if validation fails or loading is in progress
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         elevation: 10,
-        shadowColor: myColor,
-        backgroundColor: myColor,
+        shadowColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         minimumSize: const Size.fromHeight(60),
       ),
-      child: Text(
-        "SIGN UP",
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onPrimary,
-          fontFamily: "Quicksand",
-          fontWeight: FontWeight.w700,
-        ),
-      ),
+      child: _isLoading
+          ? const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            )
+          : Text(
+              "SIGN UP",
+              style: TextStyle(
+                color: _isButtonEnabled
+                    ? Theme.of(context).colorScheme.onPrimary
+                    //  text color login btn when disabled
+                    : Colors.red,
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.w700,
+              ),
+            ),
     );
   }
 

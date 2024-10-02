@@ -19,9 +19,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   bool rememberUser = false;
+// Add this to manage button state for enabled and disable btn
+  bool isButtonEnabled = false;
+
+  bool isLoading = false; // for the loading indicator
 
   final _formKey = GlobalKey<FormState>(); // Add a global key for the form
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to changes in both email and password fields to make btn states works when it has value
+    emailController.addListener(_checkFormValidity);
+    passwordController.addListener(_checkFormValidity);
+  }
+
+  // Method to check if the button should be enabled
+  void _checkFormValidity() {
+    setState(() {
+      isButtonEnabled =
+          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
     darkBlueColor = const Color(0xFF090057);
 
     return Scaffold(
-      backgroundColor: myColor,
+      // backgroundColor: Theme.of(context).brightness == Brightness.dark
+      //     ? myColor // Use black in dark mode
+      //     : myColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -71,7 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
         )),
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 32.0, left: 32.0, right: 32.0, bottom: 48.5),
+              // Contianer layout
+              top: 32.0,
+              left: 32.0,
+              right: 32.0,
+              bottom: 100),
           child: _buildForm(),
         ),
       ),
@@ -89,7 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Text("Welcome",
                   style: TextStyle(
-                    color: darkBlueColor,
+                    // Handling dark mode
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : darkBlueColor,
                     fontSize: 32,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w700,
@@ -127,7 +158,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       "Didn't have an account?   ",
                       style: TextStyle(
-                        color: darkBlueColor,
+                        // handling dark mode
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : darkBlueColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Quicksand",
                       ),
@@ -140,7 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
-                          color: darkBlueColor,
+                          // handling dark mode
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : darkBlueColor,
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w700,
                         ),
@@ -181,42 +218,125 @@ class _LoginScreenState extends State<LoginScreen> {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
-    if (!passwordRegex.hasMatch(value)) {
-      return "Password must include one uppercase letter,\none lowercase letter,"
-          " one digit, one special\ncharacter (!@#\$&*~),"
-          " and be at least 8 characters.";
-    }
+
     return null;
   }
 
+//   Widget _buildLoginButton() {
+//     return ElevatedButton(
+//       onPressed: isButtonEnabled && !isLoading
+//           ? () {
+//               if (_formKey.currentState?.validate() ?? false) {
+//                 debugPrint("Email : ${emailController.text}");
+//                 debugPrint("Password : ${passwordController.text}");
+//                 AuthHelper.logIn(
+//                   email: emailController.text,
+//                   password: passwordController.text,
+//                   context: context,
+//                 );
+//               }
+//             }
+//           : null, // Disable the button if isButtonEnabled is false
+
+//       style: ElevatedButton.styleFrom(
+//         shape: const StadiumBorder(),
+//         elevation: 10,
+//         shadowColor: Theme.of(context).colorScheme.primary,
+//         backgroundColor: isButtonEnabled
+//             ? Theme.of(context).colorScheme.primary
+//             : Colors.grey, // Change button color when disabled
+//         minimumSize: const Size.fromHeight(60),
+//       ),
+//       child: Text(
+//         "LOGIN",
+//         style: TextStyle(
+//           color: isButtonEnabled
+//               ? Theme.of(context).colorScheme.onPrimary
+//               : Colors.white, // Adjust text color when disabled
+//           fontFamily: "Quicksand",
+//           fontWeight: FontWeight.w700,
+//         ),
+//       ),
+//     );
+//   }
+// }
+
   Widget _buildLoginButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          debugPrint("Email : ${emailController.text}");
-          debugPrint("Password : ${passwordController.text}");
-          AuthHelper.logIn(
-            email: emailController.text,
-            password: passwordController.text,
-            context: context,
-          );
-        }
-      },
+      onPressed: isButtonEnabled && !isLoading
+          ? () async {
+              if (_formKey.currentState?.validate() ?? false) {
+                debugPrint("Email : ${emailController.text}");
+                debugPrint("Password : ${passwordController.text}");
+                setState(() {
+                  // Show indicator
+                  isLoading = true;
+                });
+
+                try {
+                  await AuthHelper.logIn(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    context: context,
+                  );
+                  //  show success
+                  debugPrint("Login was successful");
+
+                  //  success snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Login Successful!'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+
+                  // Optionally navigate to another screen after login success
+                } catch (e) {
+                  debugPrint("Login failed: $e");
+
+                  // Handle login failure
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Sign-up failed: ${e.toString()}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } finally {
+                  setState(() {
+                    // Hide loading indicator
+                    isLoading = false;
+                  });
+                }
+              }
+            }
+          : null, // Disable the button if isButtonEnabled is false or loading
+
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         elevation: 10,
-        shadowColor: myColor,
-        backgroundColor: myColor,
+        shadowColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: isButtonEnabled
+            ? Theme.of(context).colorScheme.primary
+            // Change button color when disabled (for the disaable btn)
+            : Colors.grey,
         minimumSize: const Size.fromHeight(60),
       ),
-      child: Text(
-        "LOGIN",
-        style: TextStyle(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          fontFamily: "Quicksand",
-          fontWeight: FontWeight.w700,
-        ),
-      ),
+      child: isLoading
+          ? const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            )
+          : Text(
+              "LOGIN",
+              style: TextStyle(
+                color: isButtonEnabled
+                    ? Theme.of(context).colorScheme.onPrimary
+                    //  text color login btn when disabled
+                    : Colors.red,
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.w700,
+              ),
+            ),
     );
   }
 }
