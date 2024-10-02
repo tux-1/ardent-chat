@@ -118,9 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
               Text("Welcome",
                   style: TextStyle(
                     // Handling dark mode
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : darkBlueColor,
+                    color: Theme.of(context).colorScheme.primary,
+
                     fontSize: 32,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w700,
@@ -156,12 +155,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Didn't have an account?   ",
+                      "Don't have an account?   ",
                       style: TextStyle(
                         // handling dark mode
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : darkBlueColor,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Quicksand",
                       ),
@@ -175,9 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         "Sign Up",
                         style: TextStyle(
                           // handling dark mode
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : darkBlueColor,
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w700,
                         ),

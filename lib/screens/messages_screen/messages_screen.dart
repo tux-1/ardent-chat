@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'widgets/message_list_view.dart';
 import 'widgets/message_input_field.dart';
@@ -27,7 +28,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<MessagesCubit>().fetchMessages(widget.chat.contact.id);
+    context.read<MessagesCubit>().fetchMessages(widget.chat.chatId);
   }
 
   @override
@@ -53,20 +54,24 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
+    final myId = FirebaseAuth.instance.currentUser!.uid;
+
     final message = Message(
-      senderId: '3',
+      senderId: myId,
       text: text,
       messageType: MessageType.text,
       time: Timestamp.now(),
-      seenBy: [],
+      seenBy: [
+        myId,
+      ],
       attachmentUrl: null,
       attachmentFile: null,
     );
 
     context.read<MessagesCubit>().sendMessage(
-      message: message,
-      chatId: widget.chat.contact.id,
-    );
+          message: message,
+          chatId: widget.chat.chatId,
+        );
 
     _messageController.clear();
   }

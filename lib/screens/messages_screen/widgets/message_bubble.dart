@@ -1,4 +1,6 @@
 
+import 'package:ardent_chat/common/utils/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../common/models/message.dart';
 import '../../../common/models/message_type.dart';
@@ -10,7 +12,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = message.senderId == '3';
+    bool isMe = message.senderId == FirebaseAuth.instance.currentUser!.uid;
 
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -18,7 +20,7 @@ class MessageBubble extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isMe ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
+          color: isMe ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
           borderRadius: isMe
               ? const BorderRadius.only(
             topLeft: Radius.circular(10),
@@ -36,7 +38,7 @@ class MessageBubble extends StatelessWidget {
           children: [
             _buildMessageContent(context),
             Text(
-              message.time.toDate().toString(),
+              message.time.toDate().toFormattedString(),
               style: TextStyle(
                 color: isMe ? Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7) : Theme.of(context).colorScheme.onSecondary.withOpacity(0.7),
                 fontSize: 8,

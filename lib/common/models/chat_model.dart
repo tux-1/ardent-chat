@@ -7,6 +7,9 @@ class Chat {
   // Other contact's data
   final Contact contact;
 
+  // The chat's ID
+  final String chatId;
+
   // Message related data
   final MessageType messageType;
   final String text;
@@ -16,11 +19,10 @@ class Chat {
 
   Chat({
     required this.contact,
+    required this.chatId,
     required this.messageType,
     required this.text,
     required this.time,
     required this.unreadCount,
   });
 }
-
-

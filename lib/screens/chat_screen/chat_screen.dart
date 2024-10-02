@@ -29,7 +29,7 @@ class ChatScreen extends StatelessWidget {
                   );
 
                 case RequestStatus.loaded:
-                  return _ChatList(state);
+                  return _buildChatsList(state);
 
                 case RequestStatus.error:
                   return const Center(child: Text('Failed to load chats'));
@@ -41,9 +41,9 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _ChatList(ChatsState state) {
+  Widget _buildChatsList(ChatsState state) {
     if (state.chats.isEmpty) {
-      return const Center(child: Text('No chats available'));
+      return const Center(child: Text('No chats yet'));
     }
 
     return ListView.builder(

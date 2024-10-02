@@ -94,6 +94,7 @@ class ChatsHelper {
 
         // Return the updated Chat object with the contact info and unread count
         return Chat(
+          chatId: doc.id,
           contact: contact,
           messageType: lastMessageType,
           text: lastMessageText,
@@ -103,6 +104,7 @@ class ChatsHelper {
       } else {
         // Handle case where no messages are found
         return Chat(
+          chatId: '',
           contact: contact,
           messageType: MessageType.text,
           text: '',
