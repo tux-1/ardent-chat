@@ -1,11 +1,10 @@
 import 'package:ardent_chat/common/constants/routes.dart';
-import 'package:ardent_chat/common/models/chat_model.dart';
 
 import 'package:ardent_chat/common/theme/theme.dart';
 import 'package:ardent_chat/screens/home_screen/home_screen.dart';
 import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/messages_screen/cubit/messages_cubit.dart';
-import 'package:ardent_chat/screens/messages_screen/messages_screen.dart';
+
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
 import 'package:ardent_chat/screens/verification/verification_screen.dart';
@@ -57,30 +56,31 @@ class MyApp extends ConsumerWidget {
 
     // return MaterialApp(
     return MultiBlocProvider(
-        providers: [
-          BlocProvider<ChatsCubit>(create: (_) => ChatsCubit()),
-          BlocProvider<MessagesCubit>(
+      providers: [
+        BlocProvider<ChatsCubit>(create: (_) => ChatsCubit()),
+        BlocProvider<MessagesCubit>(
           create: (_) => MessagesCubit(),
         ),
       ],
-        child: MaterialApp(
-          title: 'Ardent Chat',
-          themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
-          theme: kLightTheme,
-          darkTheme: kDarkTheme,
-          debugShowCheckedModeBanner: false,
-          initialRoute: Routes.splashScreen,
-          routes: {
-            Routes.splashScreen: (context) => const AnimatedSplashScreen(),
-            Routes.authenticationScreen: (context) => Container(),
-            Routes.loginScreen: (context) => const LoginScreen(),
-            Routes.signUpScreen: (context) => const SignUpScreen(),
-            Routes.homeScreen: (context) => const HomeScreen(),
-            Routes.addFriendScreen: (context) => const AddFriendScreen(),
-            Routes.onBoardingScreen: (context) => const OnboardingScreen(),
-            Routes.verifyAuthenticationScreen: (context) =>
-                const VerificationScreen(),
-          },
-        ));
+      child: MaterialApp(
+        title: 'Ardent Chat',
+        themeMode: finalTheme ? ThemeMode.dark : ThemeMode.light,
+        theme: kLightTheme,
+        darkTheme: kDarkTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.splashScreen,
+        routes: {
+          Routes.splashScreen: (context) => const AnimatedSplashScreen(),
+          Routes.authenticationScreen: (context) => Container(),
+          Routes.loginScreen: (context) => const LoginScreen(),
+          Routes.signUpScreen: (context) => const SignUpScreen(),
+          Routes.homeScreen: (context) => const HomeScreen(),
+          Routes.addFriendScreen: (context) => const AddFriendScreen(),
+          Routes.onBoardingScreen: (context) => const OnboardingScreen(),
+          Routes.verifyAuthenticationScreen: (context) =>
+              const VerificationScreen(),
+        },
+      ),
+    );
   }
 }
