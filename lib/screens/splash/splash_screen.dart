@@ -63,8 +63,7 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
     if (_isFirstTime) {
       Navigator.of(context).pushReplacementNamed(Routes.onBoardingScreen);
       return;
-    }
-    else if (FirebaseAuth.instance.currentUser != null) {
+    } else if (FirebaseAuth.instance.currentUser != null) {
       await FirebaseAuth.instance.currentUser?.reload().onError(
         (error, stackTrace) {
           // User has been deleted
@@ -119,6 +118,10 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white // For dark mode
+        : Color(0xFF090057);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
@@ -139,7 +142,11 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/Ardent-Chat-Text-Transparent.png',
+                  // Check brightness and load the appropriate image
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/images/Ardent-Chat-Text-Transparent-Light.png' // Image for dark mode
+                      : 'assets/images/Ardent-Chat-Text-Transparent.png', // Image for light mode
+
                   width: 200,
                   // "ARDENT CHAT" text animation (Fade in after the logo moves)
                 ).animate().fadeIn(duration: 1000.ms, delay: 1600.ms),
@@ -150,22 +157,22 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen> {
                     children: [
                       Text(
                         _sloganText,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 8,
                           letterSpacing: 2,
                           wordSpacing: 1,
-                          color: Color(0xFF090057),
+                          color: textColor,
                         ),
                       ),
                       // Blinking cursor
                       AnimatedOpacity(
                         opacity: _showCursor ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const Text(
+                        child: Text(
                           '|',
                           style: TextStyle(
                             fontSize: 8,
-                            color: Color(0xFF090057),
+                            color: textColor,
                           ),
                         ),
                       ),

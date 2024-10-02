@@ -1,7 +1,7 @@
 import 'package:ardent_chat/screens/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-
+import 'package:ardent_chat/screens/add_friend_Screen/add-friend.dart'; // Import the AddFriendScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
-
         // TODO: We should call ChatsScreen & Settings Screen
         const ChatScreen(),
         const Center(child: Text("Settings")),
@@ -28,6 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: const CircleBorder(),
         onPressed: () {
           // TODO: We should call Add Friends Screen
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddFriendScreen(),
+            ),
+          );
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: Icon(
