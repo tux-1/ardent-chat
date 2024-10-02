@@ -9,7 +9,6 @@ import 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
   StreamSubscription<List<Chat>>? _chatsSubscription;
-  static const Duration _timeoutDuration = Duration(seconds: 10);
 
   ChatsCubit() : super(ChatsState()) {
     getChats();
@@ -23,30 +22,19 @@ class ChatsCubit extends Cubit<ChatsState> {
     await _chatsSubscription?.cancel();
 
     // Subscribe to the chat stream
-    _chatsSubscription = ChatsHelper.getChatsStream().listen((chats) {
-      // When new chat data is received from the stream, emit the updated state
-      emit(state.copyWith(
-        chats: chats,
-        status: RequestStatus.loaded,
-      ));
-    }, onError: (error) {
-      // Handle any errors in the stream
-      emit(state.copyWith(status: RequestStatus.error));
-    });
-    _chatsSubscription = ChatsHelper.getChatsStream().timeout(_timeoutDuration)
+    _chatsSubscription = ChatsHelper.getChatsStream()
+
         .listen((chats) {
-      // When new chat data is received from the stream, emit the updated state
       emit(state.copyWith(
         chats: chats,
         status: RequestStatus.loaded,
       ));
     }, onError: (error) {
-      // Handle any errors in the stream
       emit(state.copyWith(status: RequestStatus.error));
     });
   }
 
-  // Dispose of the subscription when the cubit is closed to avoid memory leaks
+    // Dispose of the subscription when the cubit is closed to avoid memory leaks
   @override
   Future<void> close() {
     _chatsSubscription?.cancel();

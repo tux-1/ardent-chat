@@ -2,7 +2,7 @@ import 'package:ardent_chat/common/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../common/models/chat_model.dart';
 import '../../../common/models/message_type.dart';
-import 'package:ardent_chat/screens/private_messaging/private_messaging.dart'; // Assuming this imports the MessagesScreen
+import 'package:ardent_chat/screens/messages_screen/messages_screen.dart';
 
 class ChatBox extends StatelessWidget {
   final Chat chat;
@@ -19,14 +19,9 @@ class ChatBox extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => MessagesScreen(
-                profileImageUrl: chat.contact.profileImageUrl,
-                username: chat.contact.username,
-                isOnline: chat.contact.isOnline,
-              ),
+              builder: (context) => MessagesScreen(chat: chat),
             ),
           );
         },
@@ -34,7 +29,7 @@ class ChatBox extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundImage: chat.contact.profileImageUrl.isEmpty
-                  ? const AssetImage('assets/images/welcome (1).png')
+                  ? const AssetImage('assets/images/anonymous.png')
                   : NetworkImage(chat.contact.profileImageUrl) as ImageProvider,
               radius: 25,
             ),
