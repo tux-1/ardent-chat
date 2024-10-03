@@ -63,4 +63,34 @@ class MessagesHelper {
         .collection('messages')
         .add(messageData);
   }
+
+  static Future<void> markMessagesAsSeen(String chatId) async {
+    final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    // Reference to the messages collection in the chat
+    final messagesCollection = FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages');
+
+    // Get all messages that have not been seen by the current user
+    final QuerySnapshot unreadMessagesSnapshot = await messagesCollection
+        .where('seenBy', whereNotIn: [
+      currentUserId
+    ]) // This ensures we only get unread messages
+        .get();
+
+    // Batch update messages to mark them as seen
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (final messageDoc in unreadMessagesSnapshot.docs) {
+      batch.update(messageDoc.reference, {
+        'seenBy': FieldValue.arrayUnion(
+            [currentUserId]), // Add current user ID to seenBy
+      });
+    }
+
+    // Commit the batch update
+    await batch.commit();
+  }
 }

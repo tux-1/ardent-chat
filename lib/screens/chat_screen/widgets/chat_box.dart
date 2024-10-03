@@ -1,4 +1,5 @@
 import 'package:ardent_chat/common/utils/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../common/models/chat_model.dart';
 import '../../../common/models/message_type.dart';
@@ -68,7 +69,7 @@ class ChatBox extends StatelessWidget {
         subtitle: _buildMessageContent(
           messageType: chat.messageType,
           context: context,
-          text: chat.text,
+          text: "${chat.lastMessageSenderId == FirebaseAuth.instance.currentUser?.uid ? "You: ":""}${chat.text}",
         ),
       ),
     );

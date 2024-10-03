@@ -11,16 +11,19 @@ class MessagesCubit extends Cubit<MessagesState> {
     emit(state.copyWith(status: RequestStatus.loading));
 
     MessagesHelper.fetchMessagesStream(chatId).listen((messages) {
-      emit(state.copyWith(
-        messages: messages,
-        status: RequestStatus.loaded,
-      ));
+      emit(
+        state.copyWith(
+          messages: messages,
+          status: RequestStatus.loaded,
+        ),
+      );
     }).onError((error) {
       emit(state.copyWith(status: RequestStatus.error));
     });
   }
 
-  Future<void> sendMessage({required Message message, required String chatId}) async {
+  Future<void> sendMessage(
+      {required Message message, required String chatId}) async {
     try {
       await MessagesHelper.sendMessage(msg: message, chatId: chatId);
     } catch (e) {
@@ -28,4 +31,3 @@ class MessagesCubit extends Cubit<MessagesState> {
     }
   }
 }
-

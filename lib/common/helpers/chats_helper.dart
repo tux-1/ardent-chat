@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:rxdart/rxdart.dart';
 
 import '../models/chat_model.dart';
@@ -96,6 +93,7 @@ class ChatsHelper {
         return Chat(
           chatId: doc.id,
           contact: contact,
+          lastMessageSenderId: lastMessageData['senderId'],
           messageType: lastMessageType,
           text: lastMessageText,
           time: lastMessageTime,
@@ -107,59 +105,12 @@ class ChatsHelper {
           chatId: '',
           contact: contact,
           messageType: MessageType.text,
+          lastMessageSenderId: '',
           text: '',
           time: Timestamp.now(),
           unreadCount: 0,
         );
       }
     });
-  }
-
-  /// Function to send a message
-  static Future<void> sendMessage({
-    required String chatId,
-    required String text, // For text messages
-    File? attachment, // File for the attachment, if any
-    required MessageType messageType,
-  }) async {
-    try {
-      String? attachmentUrl;
-      final currentUser = FirebaseAuth.instance.currentUser;
-
-      // Step 1: If there is an attachment, upload it to Firebase Storage
-      if (attachment != null) {
-        final storageRef = FirebaseStorage.instance.ref().child(
-            'chats/$chatId/${DateTime.now().millisecondsSinceEpoch}_${attachment.path.split('/').last}');
-
-        final uploadTask = await storageRef.putFile(attachment);
-
-        // Get the attachment's download URL after upload
-        attachmentUrl = await uploadTask.ref.getDownloadURL();
-      }
-
-      // Step 2: Prepare the message data for Firestore
-      final messageData = {
-        'senderId': currentUser?.uid, // Dynamically set sender ID
-        'text': text,
-        'messageType': messageType
-            .index, // Store message type (e.g., text, image, video, etc.)
-        'attachmentUrl': attachmentUrl, // Add attachment URL if any
-        'time': FieldValue.serverTimestamp(), // Add server timestamp
-        'seenBy': [currentUser?.uid], // Initialize seenBy with sender's ID
-      };
-
-      // Step 3: Store the message in Firestore under the chat's messages sub-collection
-      await FirebaseFirestore.instance
-          .collection('chats')
-          .doc(chatId)
-          .collection('messages')
-          .add(messageData);
-    } catch (error) {
-      // Handle error, could be Firebase or other errors
-      if (kDebugMode) {
-        print("Error sending message: $error");
-      }
-      throw ErrorDescription("Failed to send message.");
-    }
   }
 }
