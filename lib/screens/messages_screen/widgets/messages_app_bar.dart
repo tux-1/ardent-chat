@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import '../../../common/models/chat_model.dart';
 
 class MessageAppBar extends StatelessWidget {
@@ -60,13 +61,31 @@ class MessageAppBar extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.video_call),
               onPressed: () {
-
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (context) => ZegoUIKitPrebuiltCall(
+                //     appID: 1833720256,
+                //     appSign: "3ff3882a27c8e9362af6eaab90f28260d951df8c8c4e382b828303273ae82847",
+                //     userID: 'user1',
+                //     userName: 'User 1',
+                //     callID: 'call_001',
+                //     config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
+                //   ),
+                // ));
               },
             ),
             IconButton(
               icon: const Icon(Icons.phone),
               onPressed: () {
-
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (context) => ZegoUIKitPrebuiltCall(
+                //     appID: 1833720256,
+                //     appSign: "3ff3882a27c8e9362af6eaab90f28260d951df8c8c4e382b828303273ae82847",
+                //     userID: 'user1',
+                //     userName: 'User 1',
+                //     callID: 'call_001',
+                //     config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+                //   ),
+                // ));
               },
             ),
           ],
