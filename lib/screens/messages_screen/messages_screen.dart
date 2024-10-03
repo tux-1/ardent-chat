@@ -31,10 +31,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: MessageAppBar(chat: widget.chat),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-      ),
+      appBar: MessagesAppBar(chat: widget.chat),
+
       body: Column(
         children: [
           const Expanded(child: MessageListView()),

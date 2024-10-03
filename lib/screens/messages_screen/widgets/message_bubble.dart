@@ -12,38 +12,46 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMe = message.senderId == FirebaseAuth.instance.currentUser!.uid;
-
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isMe
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10).copyWith(
-            topLeft: Radius.circular(isMe ? 10 : 0),
-            bottomLeft: Radius.circular(isMe ? 10 : 0),
-            bottomRight: Radius.circular(isMe ? 0 : 10),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            _buildMessageContent(context),
-            Text(
-              message.time.toDate().toFormattedString(),
-              style: TextStyle(
-                color: isMe
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onSecondary,
-                fontSize: 8,
+      child: Column(
+        crossAxisAlignment: isMe?CrossAxisAlignment.end:CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: isMe
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10).copyWith(
+                topLeft: Radius.circular(isMe ? 10 : 0),
+                bottomRight: Radius.circular(isMe ? 0 : 10),
               ),
             ),
-          ],
-        ),
-      ),
+            child: _buildMessageContent(context),
+    ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10,left:10),
+              child: Row(
+                mainAxisAlignment: isMe?MainAxisAlignment.end:MainAxisAlignment.start,
+                children: [
+                  Text(
+                    message.time.toDate().toFormattedString(),
+                    style: TextStyle(
+                      color: isMe
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : Theme.of(context).colorScheme.onSecondary,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 3,),
+                  const Icon(Icons.check,size:12,)
+                ],
+              ),
+            ),
+    ])
     );
   }
 
@@ -71,6 +79,7 @@ class MessageBubble extends StatelessWidget {
 
   Widget _buildImageMessage(BuildContext context) {
     return GestureDetector(
+
       onTap: () {
         Navigator.push(
           context,
@@ -101,11 +110,15 @@ class MessageBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            message.attachmentUrl!,
-            height: 300,
-            width: 250,
-            fit: BoxFit.fill,
+          
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              message.attachmentUrl!,
+              height: 100,
+              width: 200,
+              fit: BoxFit.fill,
+            ),
           ),
          const SizedBox(height: 5,),
          Text(

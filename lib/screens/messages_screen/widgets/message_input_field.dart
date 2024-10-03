@@ -167,7 +167,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                   TextField(
                     controller: widget.messageController,
                     decoration: InputDecoration(
-                      hintText: 'Type a message...',
+                      hintText: 'Type here...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
