@@ -35,6 +35,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
     if (image != null) {
       setState(() {
         selectedImage = File(image.path);
+        _showPreviewDialog(); // Show dialog when image is picked
       });
     }
   }
@@ -44,6 +45,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
     if (file != null) {
       setState(() {
         selectedFile = File(file.path);
+        _showPreviewDialog(); // Show dialog when file is picked
       });
     }
   }
@@ -77,18 +79,15 @@ class _MessageInputFieldState extends State<MessageInputField> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (selectedImage != null || selectedFile != null)
-          Container(
-
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Stack(
-
+  void _showPreviewDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-
                 if (selectedImage != null)
                   Image.file(
                     selectedImage!,
@@ -103,86 +102,113 @@ class _MessageInputFieldState extends State<MessageInputField> {
                     width: 300,
                     fit: BoxFit.cover,
                   ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: IconButton(
-                    icon: const Icon(Icons.cancel, color: Colors.white),
-                    onPressed: _removePreview,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                blurRadius: 30.0,
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      TextField(
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: TextField(
                         controller: widget.messageController,
                         decoration: InputDecoration(
                           hintText: 'Type a message...',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      Positioned(
-                        right: 10,
-                        top: 0,
-                        bottom: 0,
-                        child: Center(
-                          child: IconButton(
-                            icon: const Icon(Icons.camera_alt_outlined),
-                            onPressed: pickImage,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 50,
-                        top: 0,
-                        bottom: 0,
-                        child: Center(
-                          child: IconButton(
-                            icon: const Icon(Icons.attach_file_outlined),
-                            onPressed: pickFile,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 10),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _removePreview();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _sendMessage();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
         ),
-      ],
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            blurRadius: 30.0,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  TextField(
+                    controller: widget.messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: IconButton(
+                        icon: const Icon(Icons.camera_alt_outlined),
+                        onPressed: pickImage,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 50,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: IconButton(
+                        icon: const Icon(Icons.attach_file_outlined),
+                        onPressed: pickFile,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: _sendMessage,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

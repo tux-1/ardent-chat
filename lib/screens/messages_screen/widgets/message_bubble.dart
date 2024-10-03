@@ -99,6 +99,7 @@ class MessageBubble extends StatelessWidget {
         );
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
             message.attachmentUrl!,
@@ -106,6 +107,12 @@ class MessageBubble extends StatelessWidget {
             width: 250,
             fit: BoxFit.fill,
           ),
+         const SizedBox(height: 5,),
+         Text(
+        message.text,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),),
         ],
       ),
     );
@@ -115,7 +122,6 @@ class MessageBubble extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: Theme.of(context).colorScheme.onPrimaryContainer),
-        const SizedBox(width: 5),
         Text(type),
       ],
     );
