@@ -1,4 +1,3 @@
-
 import 'package:ardent_chat/common/utils/extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = message.senderId == FirebaseAuth.instance.currentUser!.uid;
+    final isMe = message.senderId == FirebaseAuth.instance.currentUser!.uid;
 
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -20,17 +19,13 @@ class MessageBubble extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isMe ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
-          borderRadius: isMe
-              ? const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-          )
-              : const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomRight: Radius.circular(10),
+          color: isMe
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(10).copyWith(
+            topLeft: Radius.circular(isMe ? 10 : 0),
+            bottomLeft: Radius.circular(isMe ? 10 : 0),
+            bottomRight: Radius.circular(isMe ? 0 : 10),
           ),
         ),
         child: Column(
@@ -40,7 +35,9 @@ class MessageBubble extends StatelessWidget {
             Text(
               message.time.toDate().toFormattedString(),
               style: TextStyle(
-                color: isMe ? Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7) : Theme.of(context).colorScheme.onSecondary.withOpacity(0.7),
+                color: isMe
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSecondary,
                 fontSize: 8,
               ),
             ),
@@ -51,48 +48,76 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _buildMessageContent(BuildContext context) {
-    bool isMe = message.senderId == '3';
     switch (message.messageType) {
       case MessageType.text:
         return Text(
           message.text,
-
-          style: TextStyle(color: isMe ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.onPrimaryContainer),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         );
       case MessageType.image:
-        return Row(
-          children: [
-            Icon(Icons.image, color: Theme.of(context).colorScheme.onPrimary),
-            const SizedBox(width: 5),
-            const Text('Image'),
-          ],
-        );
+        return _buildImageMessage(context);
       case MessageType.audio:
-        return Row(
-          children: [
-            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onSurface),
-            const SizedBox(width: 5),
-            const Text('Audio'),
-          ],
-        );
+        return _buildFileMessage(context, 'Audio', Icons.audiotrack);
       case MessageType.video:
-        return Row(
-          children: [
-            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onSurface),
-            const SizedBox(width: 5),
-            const Text('Video'),
-          ],
-        );
+        return _buildFileMessage(context, 'Video', Icons.videocam);
       case MessageType.gif:
-        return Row(
-          children: [
-            Icon(Icons.gif, color: Theme.of(context).colorScheme.onSurface),
-            const SizedBox(width: 5),
-            const Text('GIF'),
-          ],
-        );
+        return _buildFileMessage(context, 'GIF', Icons.gif);
       default:
-        return const SizedBox();
+        return const SizedBox.shrink();
     }
+  }
+
+  Widget _buildImageMessage(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.black,
+              appBar: AppBar(
+                backgroundColor: Colors.black,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              body: Center(
+                child: InteractiveViewer(
+                  child: Image.network(
+                    message.attachmentUrl!,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Image.network(
+            message.attachmentUrl!,
+            height: 300,
+            width: 250,
+            fit: BoxFit.fill,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFileMessage(BuildContext context, String type, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: Theme.of(context).colorScheme.onPrimaryContainer),
+        const SizedBox(width: 5),
+        Text(type),
+      ],
+    );
   }
 }
