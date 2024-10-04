@@ -59,12 +59,11 @@ class ProfileScreen extends StatelessWidget {
                       const SizedBox(height: 50),
                       NameWidget(
                         currentName: state.name,
-                        onNameChanged: (newName) {
-                          context.read<ProfileCubit>().saveName(newName);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Name updated successfully!')),
-                          );
+                        onNameChanged: (newName) async {
+                            await context.read<ProfileCubit>().saveName(newName);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Name updated successfully!')),
+                            );
                         },
                       ),
                       const Divider(thickness: 0.3),

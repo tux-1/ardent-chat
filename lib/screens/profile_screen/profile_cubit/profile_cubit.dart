@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../common/helpers/profile_helper.dart';
 import 'profile_state.dart';
@@ -32,6 +33,14 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(state.copyWith(
           status: ProfileStatus.error, errorMessage: 'Failed to load profile'));
     }
+  }
+  static Future<List> checkUsernameExists(String username) async {
+    final usernameQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username.toLowerCase())
+        .get();
+
+    return usernameQuery.docs;
   }
 
   Future<void> saveName(String newName) async {
