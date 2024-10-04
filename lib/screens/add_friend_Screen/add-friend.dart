@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../common/widgets/theme_switch.dart';
+import '../../common/helpers/friends_helper.dart';
+import '../../common/models/contact.dart';
 
 class AddFriendScreen extends StatefulWidget {
-  const AddFriendScreen({Key? key}) : super(key: key);
+  const AddFriendScreen({super.key});
 
   @override
   _AddFriendScreenState createState() => _AddFriendScreenState();
@@ -66,12 +67,11 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            ThemeSwitch(), // Optional dark mode switch
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: 'Search For Friends',
-                hintText: 'Enter username or email',
+                hintText: 'Enter username',
                 prefixIcon: const Icon(Icons.search, color: Color(0xFF6e3cfd)),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Color(0xFF6e3cfd)),

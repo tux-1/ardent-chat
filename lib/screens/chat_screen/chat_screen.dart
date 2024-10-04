@@ -6,8 +6,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/chat_box.dart';
 import 'cubit/chats_cubit.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChatsCubit>().getChats();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -27,8 +27,8 @@ class FriendsHelper {
   // Add a friend by creating a new chat document
   Future<void> addFriend(String friendId) async {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
-
-    if (currentUserId != null && friendId.isNotEmpty) {
+    final isAlreadyAdded = await isAlreadyFriends(friendId);
+    if (currentUserId != null && friendId.isNotEmpty && !isAlreadyAdded) {
       // Create a new chat document between the current user and the friend
       final chatDocRef = _firestore.collection('chats').doc();
 
@@ -37,12 +37,6 @@ class FriendsHelper {
         'participants': [currentUserId, friendId],
         'createdAt': FieldValue.serverTimestamp(),
       });
-
-      // Create an empty subcollection 'messages' under this chat document
-      await chatDocRef
-          .collection('messages')
-          .doc('initial_placeholder')
-          .set({});
     }
   }
 

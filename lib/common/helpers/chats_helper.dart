@@ -90,6 +90,7 @@ class ChatsHelper {
         final int unreadCount = unreadMessages.length;
 
         // Return the updated Chat object with the contact info and unread count
+        
         return Chat(
           chatId: doc.id,
           contact: contact,
@@ -102,12 +103,12 @@ class ChatsHelper {
       } else {
         // Handle case where no messages are found
         return Chat(
-          chatId: '',
+          chatId: doc.id,
           contact: contact,
           messageType: MessageType.text,
           lastMessageSenderId: '',
           text: '',
-          time: Timestamp.now(),
+          time: doc.data()?['createdAt'],
           unreadCount: 0,
         );
       }
