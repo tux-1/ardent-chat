@@ -14,8 +14,13 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),),
+        borderRadius: BorderRadius.circular(25),
+        color: Theme.of(context).scaffoldBackgroundColor,
+
+      ),
+
       child: AppBar(
+        elevation: 0,
         title: Row(
           children: [
             Row(
@@ -62,7 +67,7 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.videocam_outlined),
+                  icon: Icon(Icons.videocam_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ZegoUIKitPrebuiltCall(
@@ -77,7 +82,7 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.phone_outlined),
+                  icon: Icon(Icons.phone_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ZegoUIKitPrebuiltCall(

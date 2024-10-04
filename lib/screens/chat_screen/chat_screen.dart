@@ -11,6 +11,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchQuery = context.watch<ChatsCubit>().state.searchQuery;
     return Column(
       children: [
         const ChatsAppBar(),
@@ -19,18 +20,10 @@ class ChatScreen extends StatelessWidget {
             builder: (context, state) {
               switch (state.status) {
                 case RequestStatus.initial:
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-
                 case RequestStatus.loading:
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-
+                  return const Center(child: CircularProgressIndicator());
                 case RequestStatus.loaded:
-                  return _buildChatsList(state);
-
+                  return _buildChatsList(state, searchQuery);
                 case RequestStatus.error:
                   return const Center(child: Text('Failed to load chats'));
               }
@@ -41,16 +34,16 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChatsList(ChatsState state) {
+  Widget _buildChatsList(ChatsState state, String searchQuery) {
     if (state.chats.isEmpty) {
-      return const Center(child: Text('No chats yet'));
+      return const Center(child: Text('No chats matched'));
     }
 
     return ListView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: state.chats.length,
       itemBuilder: (context, index) {
-        return ChatBox(chat: state.chats[index]);
+        return ChatBox(chat: state.chats[index],);
       },
     );
   }

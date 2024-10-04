@@ -13,6 +13,7 @@ class ChatBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(4),
+      margin: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).colorScheme.surface,
@@ -52,14 +53,14 @@ class ChatBox extends StatelessWidget {
           children: [
             Text(
               chat.contact.username,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface),
               overflow: TextOverflow.ellipsis,
             ),
             const Spacer(),
             Text(
               chat.time.toDate().toFormattedString(),
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
                 fontSize: 12,
               ),
             ),
@@ -87,42 +88,42 @@ class ChatBox extends StatelessWidget {
         messageWidget = Text(
           text,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
         );
         break;
       case MessageType.image:
         messageWidget = Row(
           children: [
-            Icon(Icons.image, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.image, color: Theme.of(context).colorScheme.onPrimaryContainer),
             const SizedBox(width: 5),
-            const Text('Image'),
+            Text('Image',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
         );
         break;
       case MessageType.audio:
         messageWidget = Row(
           children: [
-            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onPrimaryContainer),
             const SizedBox(width: 5),
-            const Text('Audio'),
+            Text('Audio',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
         );
         break;
       case MessageType.video:
         messageWidget = Row(
           children: [
-            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onPrimaryContainer),
             const SizedBox(width: 5),
-            const Text('Video'),
+            Text('Video',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
         );
         break;
       case MessageType.gif:
         messageWidget = Row(
           children: [
-            Icon(Icons.gif, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.gif, color: Theme.of(context).colorScheme.onPrimaryContainer),
             const SizedBox(width: 5),
-            const Text('GIF'),
+            Text('GIF',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
         );
         break;

@@ -40,14 +40,14 @@ class MessageBubble extends StatelessWidget {
                     message.time.toDate().toFormattedString(),
                     style: TextStyle(
                       color: isMe
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : Theme.of(context).colorScheme.onSecondary,
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onPrimaryContainer,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(width: 3,),
-                  const Icon(Icons.check,size:12,)
+                  Icon(isMe?Icons.check:null,size:12,color: Theme.of(context).colorScheme.onPrimaryContainer,)
                 ],
               ),
             ),
@@ -87,7 +87,7 @@ class MessageBubble extends StatelessWidget {
             builder: (context) => Scaffold(
               backgroundColor: Colors.black,
               appBar: AppBar(
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
@@ -117,7 +117,7 @@ class MessageBubble extends StatelessWidget {
               message.attachmentUrl!,
               height: 100,
               width: 200,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
          const SizedBox(height: 5,),

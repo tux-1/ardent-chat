@@ -111,6 +111,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                         controller: widget.messageController,
                         decoration: InputDecoration(
                           hintText: 'Type a message...',
+                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.secondary,
                         ),
@@ -124,7 +125,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                       child: const Text('Cancel'),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.send),
+                      icon:  Icon(Icons.send,color: Theme.of(context).colorScheme.onPrimaryContainer,),
                       onPressed: () {
                         Navigator.pop(context);
                         _sendMessage();
@@ -150,12 +151,6 @@ class _MessageInputFieldState extends State<MessageInputField> {
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
-            blurRadius: 30.0,
-          ),
-        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -168,6 +163,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                     controller: widget.messageController,
                     decoration: InputDecoration(
                       hintText: 'Type here...',
+                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -182,7 +178,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                     bottom: 0,
                     child: Center(
                       child: IconButton(
-                        icon: const Icon(Icons.camera_alt_outlined),
+                        icon: Icon(Icons.camera_alt_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
                         onPressed: pickImage,
                       ),
                     ),
@@ -193,7 +189,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                     bottom: 0,
                     child: Center(
                       child: IconButton(
-                        icon: const Icon(Icons.attach_file_outlined),
+                        icon: Icon(Icons.attach_file_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
                         onPressed: pickFile,
                       ),
                     ),
@@ -203,7 +199,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
             ),
             const SizedBox(width: 10),
             IconButton(
-              icon: const Icon(Icons.send),
+              icon: Icon(Icons.send,color: Theme.of(context).colorScheme.onPrimaryContainer,),
               onPressed: _sendMessage,
             ),
           ],

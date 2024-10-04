@@ -14,7 +14,7 @@ class NameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: const Icon(Icons.person_2_outlined),
+      leading: Icon(Icons.person_2_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
       title: Text(
         'Name',
         style: textTheme.titleMedium?.copyWith(
@@ -38,7 +38,7 @@ class NameWidget extends StatelessWidget {
             currentName,
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const Text("This name will be visible to your contacts"),
+          Text("This name will be visible to your contacts",style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer)),
         ],
       ),
     );
