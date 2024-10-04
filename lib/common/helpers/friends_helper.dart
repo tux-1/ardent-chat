@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/contact.dart'; // Assuming the Contact model is defined in this path
 
 class FriendsHelper {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   // Search for users by username
   Future<List<Contact>> searchByUsername(String username) async {
-    // Search for users in the "users" collection whose usernames match the query
-    final querySnapshot = await FirebaseFirestore.instance
+    final querySnapshot = await _firestore
         .collection('users')
         .where('username', isEqualTo: username.toLowerCase())
         .get();
 
-    // Convert the querySnapshot to a list of Contact objects
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
       return Contact(
@@ -30,7 +30,7 @@ class FriendsHelper {
 
     if (currentUserId != null && friendId.isNotEmpty) {
       // Create a new chat document between the current user and the friend
-      final chatDocRef = FirebaseFirestore.instance.collection('chats').doc();
+      final chatDocRef = _firestore.collection('chats').doc();
 
       // Set the participants (current user and the friend) in the chat document
       await chatDocRef.set({
@@ -39,12 +39,31 @@ class FriendsHelper {
       });
 
       // Create an empty subcollection 'messages' under this chat document
-      // You don't need to add anything to the 'messages' subcollection yet
-      final messagesCollectionRef = chatDocRef.collection('messages');
-      
-      // Optionally, you can add an empty document to initialize the collection
-      // or just leave it for later when you start sending messages.
-      await messagesCollectionRef.doc('initial_placeholder').set({});
+      await chatDocRef
+          .collection('messages')
+          .doc('initial_placeholder')
+          .set({});
     }
+  }
+
+  // Check if the user is already friends with the specified friendId
+  Future<bool> isAlreadyFriends(String friendId) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUserId != null && friendId.isNotEmpty) {
+      final chatQuerySnapshot = await _firestore
+          .collection('chats')
+          .where('participants', arrayContains: currentUserId)
+          .get();
+
+      // Check if any chat contains both users
+      for (var chatDoc in chatQuerySnapshot.docs) {
+        final participants = chatDoc['participants'] as List<dynamic>;
+        if (participants.contains(friendId)) {
+          return true; // Already friends
+        }
+      }
+    }
+    return false; // Not friends
   }
 }
