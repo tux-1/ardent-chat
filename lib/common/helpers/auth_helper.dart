@@ -1,4 +1,5 @@
 import 'package:ardent_chat/common/constants/routes.dart';
+import 'package:ardent_chat/common/helpers/profile_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -92,6 +93,7 @@ class AuthHelper {
   static Future<void> signOut(BuildContext context) async {
     final nav = Navigator.of(context);
     await _auth.signOut();
+    ProfileHelper.updateIsOnlineStatus(false);
     nav.popUntil((route) => route.isFirst);
     nav.pushReplacementNamed(Routes.loginScreen);
   }

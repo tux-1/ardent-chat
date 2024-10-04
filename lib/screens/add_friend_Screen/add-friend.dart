@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../common/widgets/theme_switch.dart';
+import '../../common/helpers/friends_helper.dart';
+import '../../common/models/contact.dart';
 
 class AddFriendScreen extends StatefulWidget {
-  const AddFriendScreen({Key? key}) : super(key: key);
+  const AddFriendScreen({super.key});
 
   @override
   _AddFriendScreenState createState() => _AddFriendScreenState();
@@ -12,31 +13,36 @@ class AddFriendScreen extends StatefulWidget {
 class _AddFriendScreenState extends State<AddFriendScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
-  List<String> _searchResults = [];
-  Map<String, bool> friendRequestStatus =
-      {}; //  sent/unsent state for each friend
+  List<Contact> _searchResults = [];
+  Map<String, bool> friendRequestStatus = {};
 
-  //  friend search ( API call in  app)
-  void _searchFriends(String query) {
+  final FriendsHelper _friendsHelper =
+      FriendsHelper(); // Instantiate FriendsHelper
+
+  // Search friends using Firebase Firestore
+  Future<void> _searchFriends(String query) async {
     setState(() {
       _isSearching = true;
     });
 
-    //  network request delay
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isSearching = false;
-        _searchResults = List<String>.generate(
-          1,
-          (index) => 'Friend $query', //  search result
-        );
+    // Call the searchByUsername method to get users from Firebase
+    final results = await _friendsHelper.searchByUsername(query);
 
-        //  friend request status for each result
-        for (var friend in _searchResults) {
-          friendRequestStatus[friend] = false; //  all requests are unsent
-        }
-      });
+    setState(() {
+      _isSearching = false;
+      _searchResults = results;
+
+      // Initialize friend request status for each result
+      for (var contact in _searchResults) {
+        friendRequestStatus[contact.id] =
+            false; // All requests are unsent initially
+      }
     });
+  }
+
+  // Check if the user is already friends
+  Future<bool> _checkIfAlreadyFriends(String friendId) async {
+    return await _friendsHelper.isAlreadyFriends(friendId);
   }
 
   @override
@@ -54,38 +60,18 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-            //background color of screen
-
-            color: Theme.of(context).brightness == Brightness.dark
-
-                //dark mode
-                ? Theme.of(context).colorScheme.secondary
-
-                //light mode
-                : Theme.of(context).colorScheme.surfaceContainerLow),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).colorScheme.surfaceContainerLow,
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // delete it after check the dark mode
-            ThemeSwitch(),
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: 'Search For Friends',
-                hintText: 'Enter username or email',
-                labelStyle: TextStyle(
-                    color: Theme.of(context).brightness == Brightness.dark
-
-                        //dark mode
-                        ? Theme.of(context).colorScheme.onPrimaryContainer
-
-                        //light mode
-                        : Theme.of(context).colorScheme.onSecondary),
-                hintStyle: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Theme.of(context).colorScheme.onPrimaryContainer
-                      : Theme.of(context).colorScheme.onSecondary,
-                ),
+                hintText: 'Enter username',
                 prefixIcon: const Icon(Icons.search, color: Color(0xFF6e3cfd)),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Color(0xFF6e3cfd)),
@@ -96,14 +82,6 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              style: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark
-                    // Use onPrimaryContainer color in dark mode
-                    ? Theme.of(context).colorScheme.onPrimaryContainer
-                    // Use secondary color in light mode
-                    : Theme.of(context).colorScheme.onSecondary,
-              ),
-              textInputAction: TextInputAction.search,
               onSubmitted: (query) {
                 if (query.isNotEmpty) {
                   _searchFriends(query);
@@ -122,14 +100,9 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                     width: 300,
                   ),
                   const SizedBox(height: 16),
-                  Text(
+                  const Text(
                     'Search for friends to add',
                     style: TextStyle(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          // Use onPrimaryContainer color in dark mode
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          // Use secondary color in light mode
-                          : Theme.of(context).colorScheme.onSecondary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -140,48 +113,62 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 child: ListView.builder(
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
-                    final friend = _searchResults[index];
-                    final isSent = friendRequestStatus[friend] ?? false;
+                    final contact = _searchResults[index];
+                    final isSent = friendRequestStatus[contact.id] ?? false;
 
-                    return ListTile(
-                      title: Text(
-                        friend,
-                        style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              // Use onPrimaryContainer color in dark mode
-                              ? Theme.of(context).colorScheme.onPrimaryContainer
-                              // Use secondary color in light mode
-                              : Theme.of(context).colorScheme.onSecondary,
-                        ),
-                      ),
-                      trailing: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            friendRequestStatus[friend] = !isSent;
-                          });
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                isSent
-                                    ? 'Friend request removed for $friend'
-                                    : 'Friend request sent to $friend',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              backgroundColor: friendRequestStatus[friend]!
-                                  ? const Color(0xFF6e3cfd)
-                                  : Colors.red,
-                            ),
+                    return FutureBuilder<bool>(
+                      future: _checkIfAlreadyFriends(contact.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return ListTile(
+                            title: Text(contact.username),
+                            trailing: CircularProgressIndicator(),
                           );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6e3cfd),
-                        ),
-                        child: Text(
-                          isSent ? 'Unsend' : 'Send',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
+                        }
+
+                        final isAlreadyFriends = snapshot.data ?? false;
+
+                        return ListTile(
+                          title: Text(contact.username),
+                          trailing: ElevatedButton(
+                            onPressed: isAlreadyFriends || isSent
+                                ? null // Disable button if already friends or request sent
+                                : () async {
+                                    // Call addFriend method to add the friend
+                                    await _friendsHelper.addFriend(contact.id);
+
+                                    setState(() {
+                                      friendRequestStatus[contact.id] =
+                                          true; // Mark request as sent
+                                    });
+
+                                    // Show a confirmation message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Friend request sent to ${contact.username}'),
+                                        backgroundColor:
+                                            const Color(0xFF6e3cfd),
+                                      ),
+                                    );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isSent
+                                  ? Colors.grey
+                                  : const Color(0xFF6e3cfd),
+                            ),
+                            child: Text(
+                              isAlreadyFriends
+                                  ? 'Already Friends'
+                                  : isSent
+                                      ? 'Request Sent'
+                                      : 'Send',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

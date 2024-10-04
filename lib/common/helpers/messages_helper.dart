@@ -1,12 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 import '../models/message.dart';
 
 class MessagesHelper {
   // Fetch messages for a particular chat document (chatId)
+  // static Stream<List<Message>> fetchMessagesStream(String chatId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('chats')
+  //       .doc(chatId)
+  //       .collection('messages')
+  //       .orderBy('time', descending: true)
+  //       .snapshots()
+  //       .map((querySnapshot) {
+  //     return querySnapshot.docs.map((doc) {
+  //       return Message.fromJson(doc.data());
+  //     }).toList();
+  //   });
+  // }
   static Stream<List<Message>> fetchMessagesStream(String chatId) {
+    if (chatId.isEmpty) {
+      debugPrint(chatId);
+      debugPrint('Invalid chatId. Cannot fetch messages.');
+      return const Stream
+          .empty(); // Return an empty stream if chatId is invalid
+    }
+
     return FirebaseFirestore.instance
         .collection('chats')
         .doc(chatId)
@@ -14,6 +35,9 @@ class MessagesHelper {
         .orderBy('time', descending: true)
         .snapshots()
         .map((querySnapshot) {
+      if (querySnapshot.docs.isEmpty) {
+        return List<Message>.empty();
+      }
       return querySnapshot.docs.map((doc) {
         return Message.fromJson(doc.data());
       }).toList();
@@ -24,6 +48,10 @@ class MessagesHelper {
     required Message msg,
     required String chatId,
   }) async {
+    if (chatId.isEmpty) {
+      debugPrint('Invalid chatId. Cannot send message.');
+      return; // Exit the function if chatId is invalid
+    }
     String? attachmentUrl;
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -66,6 +94,10 @@ class MessagesHelper {
 
   static Future<void> markMessagesAsSeen(String chatId) async {
     final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    if (chatId.isEmpty) {
+      debugPrint('Invalid chatId. Cannot fetch messages.');
+      return; // Or handle the error appropriately
+    }
 
     // Reference to the messages collection in the chat
     final messagesCollection = FirebaseFirestore.instance

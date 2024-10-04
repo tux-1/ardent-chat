@@ -43,7 +43,7 @@ class ChatBox extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 5,
                   backgroundColor:
-                  chat.contact.isOnline ? Colors.green : Colors.grey,
+                      chat.contact.isOnline ? Colors.green : Colors.grey,
                 ),
               ),
             ),
@@ -69,7 +69,8 @@ class ChatBox extends StatelessWidget {
         subtitle: _buildMessageContent(
           messageType: chat.messageType,
           context: context,
-          text: "${chat.lastMessageSenderId == FirebaseAuth.instance.currentUser?.uid ? "You: ":""}${chat.text}",
+          text:
+              "${chat.lastMessageSenderId == FirebaseAuth.instance.currentUser?.uid ? "You: " : ""}${chat.text}",
         ),
       ),
     );
@@ -80,7 +81,6 @@ class ChatBox extends StatelessWidget {
     required BuildContext context,
     required String text,
   }) {
-
     Widget messageWidget;
 
     switch (messageType) {
@@ -103,7 +103,8 @@ class ChatBox extends StatelessWidget {
       case MessageType.audio:
         messageWidget = Row(
           children: [
-            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.audiotrack,
+                color: Theme.of(context).colorScheme.onSurface),
             const SizedBox(width: 5),
             const Text('Audio'),
           ],
@@ -112,7 +113,8 @@ class ChatBox extends StatelessWidget {
       case MessageType.video:
         messageWidget = Row(
           children: [
-            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onSurface),
+            Icon(Icons.videocam,
+                color: Theme.of(context).colorScheme.onSurface),
             const SizedBox(width: 5),
             const Text('Video'),
           ],

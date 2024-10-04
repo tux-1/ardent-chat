@@ -1,8 +1,10 @@
 import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/screens/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../chat_screen/cubit/chats_cubit.dart';
 import '../settings/settings.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +16,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChatsCubit>().getChats();
+  }
 
   @override
   Widget build(BuildContext context) {
