@@ -29,7 +29,7 @@ class MessageBubble extends StatelessWidget {
                 bottomRight: Radius.circular(isMe ? 0 : 10),
               ),
             ),
-            child: _buildMessageContent(context),
+            child: _buildMessageContent(context, isMe),
     ),
             Padding(
               padding: const EdgeInsets.only(right: 10,left:10),
@@ -55,13 +55,13 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildMessageContent(BuildContext context) {
+  Widget _buildMessageContent(BuildContext context, bool isMe) {
     switch (message.messageType) {
       case MessageType.text:
         return Text(
           message.text,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: isMe ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSecondary,
           ),
         );
       case MessageType.image:

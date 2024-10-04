@@ -17,7 +17,7 @@ class EmailWidget extends StatelessWidget {
       title: Text(
         'Email',
         style: textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       subtitle: Text(

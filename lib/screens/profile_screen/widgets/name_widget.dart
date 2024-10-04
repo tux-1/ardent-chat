@@ -18,7 +18,7 @@ class NameWidget extends StatelessWidget {
       title: Text(
         'Name',
         style: textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       isThreeLine: true,
