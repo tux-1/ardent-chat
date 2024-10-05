@@ -43,7 +43,7 @@ class ChatScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       itemCount: state.chats.length,
       itemBuilder: (context, index) {
-        return ChatBox(chat: state.chats[index],);
+        return ChatBox(chat: state.chats.reversed.toList()[index],);
       },
     );
   }
