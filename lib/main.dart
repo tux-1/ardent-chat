@@ -8,6 +8,7 @@ import 'package:ardent_chat/screens/messages_screen/cubit/messages_cubit.dart';
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
 import 'package:ardent_chat/screens/verification/verification_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:ardent_chat/screens/chat_screen/cubit/chats_cubit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'common/helpers/profile_helper.dart';
 import 'firebase_options.dart';
 import 'common/theme/theme_provider.dart';
 
@@ -39,11 +41,47 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // Set user online when the app starts
+    if (FirebaseAuth.instance.currentUser != null) {
+      ProfileHelper.updateIsOnlineStatus(true);
+    }
+  }
+
+  @override
+  void dispose() {
+    // Set user offline when the app closes
+    ProfileHelper.updateIsOnlineStatus(false);
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      if (state == AppLifecycleState.resumed) {
+        // App is in the foreground
+        ProfileHelper.updateIsOnlineStatus(true);
+      } else if (state == AppLifecycleState.paused) {
+        // App is in the background
+        ProfileHelper.updateIsOnlineStatus(false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Get the brightness
     var brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;

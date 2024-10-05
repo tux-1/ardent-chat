@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import '../../common/helpers/messages_helper.dart';
 import 'widgets/message_list_view.dart';
 import 'widgets/message_input_field.dart';
 import 'widgets/messages_app_bar.dart';
@@ -19,13 +20,30 @@ class MessagesScreen extends StatefulWidget {
   State<MessagesScreen> createState() => _MessagesScreenState();
 }
 
-class _MessagesScreenState extends State<MessagesScreen> {
+class _MessagesScreenState extends State<MessagesScreen>
+    with WidgetsBindingObserver {
   final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
     context.read<MessagesCubit>().fetchMessages(widget.chat.chatId);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // When the screen is visible, mark messages as seen
+      MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
+    }
   }
 
   @override

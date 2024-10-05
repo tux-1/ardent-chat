@@ -9,6 +9,38 @@ import 'chats_helper.dart';
 
 /// Global constant to access profile information
 class ProfileHelper {
+  static Future<void> updateOnlineStatusPreference(bool showOnline) async {
+    final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    // Update the user's preference for showing online status in Firestore
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'showOnline': showOnline,
+    });
+  }
+
+  static Future<bool> getOnlineStatusPreference() async {
+    final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    // Fetch the preference from Firestore
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    return doc.data()?['showOnline'] ??
+        true; // Default to true if preference isn't set
+  }
+
+  static Future<void> updateIsOnlineStatus(bool isOnline) async {
+    final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    // Check if the user wants to show their online status
+    final bool showOnline = await getOnlineStatusPreference();
+    if (showOnline) {
+      // Update the 'isOnline' field in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'isOnline': isOnline,
+      });
+    }
+  }
+
   static Future<Contact> getProfileInfo() async {
     return await ChatsHelper.getContactData(
       FirebaseAuth.instance.currentUser!.uid,
@@ -69,7 +101,7 @@ class ProfileHelper {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     // Reference to Firestore user document
     final userDocRef =
-    FirebaseFirestore.instance.collection('users').doc(userId);
+        FirebaseFirestore.instance.collection('users').doc(userId);
 
     // Retrieve existing profile data to check for the current profile picture URL
     final userDoc = await userDocRef.get();

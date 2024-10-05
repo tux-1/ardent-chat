@@ -15,11 +15,13 @@ class Chat {
   final String text;
   final int unreadCount;
   final Timestamp time;
+  final String lastMessageSenderId;
   // attachment ??
 
   Chat({
     required this.contact,
     required this.chatId,
+    required this.lastMessageSenderId,
     required this.messageType,
     required this.text,
     required this.time,

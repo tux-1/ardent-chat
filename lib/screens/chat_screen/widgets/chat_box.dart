@@ -1,4 +1,5 @@
 import 'package:ardent_chat/common/utils/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../common/models/chat_model.dart';
 import '../../../common/models/message_type.dart';
@@ -43,7 +44,7 @@ class ChatBox extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 5,
                   backgroundColor:
-                  chat.contact.isOnline ? Colors.green : Colors.grey,
+                      chat.contact.isOnline ? Colors.green : Colors.grey,
                 ),
               ),
             ),
@@ -69,7 +70,8 @@ class ChatBox extends StatelessWidget {
         subtitle: _buildMessageContent(
           messageType: chat.messageType,
           context: context,
-          text: chat.text,
+          text:
+              "${chat.lastMessageSenderId == FirebaseAuth.instance.currentUser?.uid ? "You: " : ""}${chat.text}",
         ),
       ),
     );
@@ -80,7 +82,6 @@ class ChatBox extends StatelessWidget {
     required BuildContext context,
     required String text,
   }) {
-
     Widget messageWidget;
 
     switch (messageType) {
@@ -103,7 +104,8 @@ class ChatBox extends StatelessWidget {
       case MessageType.audio:
         messageWidget = Row(
           children: [
-            Icon(Icons.audiotrack, color: Theme.of(context).colorScheme.onPrimaryContainer),
+            Icon(Icons.audiotrack,
+                color: Theme.of(context).colorScheme.onSurface),
             const SizedBox(width: 5),
             Text('Audio',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
@@ -112,7 +114,8 @@ class ChatBox extends StatelessWidget {
       case MessageType.video:
         messageWidget = Row(
           children: [
-            Icon(Icons.videocam, color: Theme.of(context).colorScheme.onPrimaryContainer),
+            Icon(Icons.videocam,
+                color: Theme.of(context).colorScheme.onSurface),
             const SizedBox(width: 5),
             Text('Video',style:TextStyle(color:Theme.of(context).colorScheme.onPrimaryContainer )),
           ],
