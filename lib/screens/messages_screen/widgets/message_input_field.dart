@@ -83,58 +83,78 @@ class _MessageInputFieldState extends State<MessageInputField> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (selectedImage != null)
-                  Image.file(
-                    selectedImage!,
-                    height: 300,
-                    width: 300,
-                    fit: BoxFit.cover,
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.zero,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: selectedImage != null ? Image.file(
+                  selectedImage!,
+                  fit: BoxFit.fill,
+                ) : selectedFile != null ? Image.file(
+                  selectedFile!,
+                  fit: BoxFit.fill,
+                ) : const SizedBox(),
+              ),
+              Positioned(
+                top: 20,
+                left: 20,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.black.withOpacity(0.6),
+                    shape: const CircleBorder(),
                   ),
-                if (selectedFile != null)
-                  Image.file(
-                    selectedFile!,
-                    height: 300,
-                    width: 300,
-                    fit: BoxFit.cover,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _removePreview();
+                  },
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
                   ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: widget.messageController,
-                        decoration: InputDecoration(
-                          hintText: 'Type a message...',
-                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
-                          filled: true,
-                          fillColor: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _removePreview();
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    IconButton(
-                      icon:  Icon(Icons.send,color: Theme.of(context).colorScheme.onPrimaryContainer,),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _sendMessage();
-                      },
-                    ),
-                  ],
                 ),
-              ],
-            ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SafeArea(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.6),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: widget.messageController,
+                            decoration: InputDecoration(
+                              hintText: 'Add a caption...',
+                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            maxLines: null,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.send, color: Theme.of(context).colorScheme.primary,size: 30,),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _sendMessage();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -157,49 +177,67 @@ class _MessageInputFieldState extends State<MessageInputField> {
         child: Row(
           children: [
             Expanded(
-              child: Stack(
-                children: [
-                  TextField(
-                    controller: widget.messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type here...',
-                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  Positioned(
-                    right: 10,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: IconButton(
-                        icon: Icon(Icons.camera_alt_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
-                        onPressed: pickImage,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 50,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: IconButton(
-                        icon: Icon(Icons.attach_file_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
-                        onPressed: pickFile,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: widget.messageController,
+                        decoration: InputDecoration(
+                          hintText: 'Type here...',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.secondary,
+                        ),
+                           maxLines: null,
+
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 55,
+                      child: VerticalDivider(
+                        width: 1,
+                        indent: 17,
+                        endIndent: 17,
+                        thickness: 1,
+                        color:Colors.grey,
+                      ),
+                    ),
+
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.attach_file_outlined,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          onPressed: pickFile,
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.camera_alt_outlined,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          onPressed: pickImage,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 10),
             IconButton(
-              icon: Icon(Icons.send,color: Theme.of(context).colorScheme.onPrimaryContainer,),
+              icon: Icon(Icons.send,color: Theme.of(context).colorScheme.primary,size: 30,),
               onPressed: _sendMessage,
             ),
           ],
