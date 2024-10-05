@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../../common/helpers/messages_helper.dart';
 import 'widgets/message_list_view.dart';
@@ -39,6 +38,12 @@ class _MessagesScreenState extends State<MessagesScreen>
   }
 
   @override
+  void didUpdateWidget(covariant MessagesScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // When the screen is visible, mark messages as seen
@@ -50,15 +55,13 @@ class _MessagesScreenState extends State<MessagesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MessagesAppBar(chat: widget.chat),
-
       body: Column(
         children: [
           const Expanded(child: MessageListView()),
           MessageInputField(
             chat: widget.chat,
             messageController: _messageController,
-            onSendMessage: (text, image, file) {
-            },
+            onSendMessage: (text, image, file) {},
           ),
         ],
       ),
