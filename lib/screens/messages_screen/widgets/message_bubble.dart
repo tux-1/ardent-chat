@@ -146,15 +146,17 @@ class MessageBubble extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            message.text,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
+          if (message.text.isNotEmpty)
+            const SizedBox(
+              height: 5,
             ),
-          ),
+          if (message.text.isNotEmpty)
+            Text(
+              message.text,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
         ],
       ),
     );

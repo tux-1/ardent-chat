@@ -6,20 +6,6 @@ import 'package:flutter/material.dart';
 import '../models/message.dart';
 
 class MessagesHelper {
-  // Fetch messages for a particular chat document (chatId)
-  // static Stream<List<Message>> fetchMessagesStream(String chatId) {
-  //   return FirebaseFirestore.instance
-  //       .collection('chats')
-  //       .doc(chatId)
-  //       .collection('messages')
-  //       .orderBy('time', descending: true)
-  //       .snapshots()
-  //       .map((querySnapshot) {
-  //     return querySnapshot.docs.map((doc) {
-  //       return Message.fromJson(doc.data());
-  //     }).toList();
-  //   });
-  // }
   static Stream<List<Message>> fetchMessagesStream(String chatId) {
     if (chatId.isEmpty) {
       debugPrint(chatId);
