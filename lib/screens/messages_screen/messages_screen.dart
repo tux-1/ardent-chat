@@ -12,9 +12,9 @@ class MessagesScreen extends StatefulWidget {
   final Chat chat;
 
   const MessagesScreen({
-    Key? key,
+    super.key,
     required this.chat,
-  }) : super(key: key);
+  });
 
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();
@@ -29,7 +29,7 @@ class _MessagesScreenState extends State<MessagesScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
-    context.read<MessagesCubit>().fetchMessages(widget.chat.chatId);
+    context.read<MessagesCubit>().fetchMessages(widget.chat);
   }
 
   @override

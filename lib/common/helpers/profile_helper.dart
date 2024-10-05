@@ -15,6 +15,7 @@ class ProfileHelper {
     // Update the user's preference for showing online status in Firestore
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'showOnline': showOnline,
+      'isOnline' : showOnline,
     });
   }
 

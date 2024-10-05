@@ -1,6 +1,9 @@
 import 'package:ardent_chat/common/utils/extensions.dart';
+import 'package:ardent_chat/screens/messages_screen/cubit/messages_cubit.dart';
+import 'package:ardent_chat/screens/messages_screen/cubit/messages_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/models/message.dart';
 import '../../../common/models/message_type.dart';
 
@@ -11,11 +14,14 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final isMe = message.senderId == FirebaseAuth.instance.currentUser!.uid;
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment: isMe?CrossAxisAlignment.end:CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.all(10),
@@ -30,28 +36,48 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
             child: _buildMessageContent(context, isMe),
-    ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10,left:10),
-              child: Row(
-                mainAxisAlignment: isMe?MainAxisAlignment.end:MainAxisAlignment.start,
-                children: [
-                  Text(
-                    message.time.toDate().toFormattedString(),
-                    style: TextStyle(
-                      color: isMe
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          : Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10, left: 10),
+            child: Row(
+              mainAxisAlignment:
+                  isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+              children: [
+                Text(
+                  message.time.toDate().toFormattedString(),
+                  style: textTheme.bodySmall?.copyWith(
+                    color: isMe
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(width: 3,),
-                  Icon(isMe?Icons.check:null,size:12,color: Theme.of(context).colorScheme.onPrimaryContainer,)
-                ],
-              ),
+                ),
+                const SizedBox(
+                  width: 3,
+                ),
+                BlocConsumer<MessagesCubit, MessagesState>(
+                  builder: (BuildContext context, MessagesState state) {
+                    final contactId = state.chat?.contact.id;
+                    final isSeen = message.seenBy.contains(contactId);
+                    return Icon(
+                      isMe
+                          ? isSeen
+                              ? Icons.done_all
+                              : Icons.check
+                          : null,
+                      size: 17,
+                      color: isSeen
+                          ? colorScheme.primary
+                          : colorScheme.onPrimaryContainer,
+                    );
+                  },
+                  listener: (BuildContext context, MessagesState state) {},
+                )
+              ],
             ),
-    ])
+          ),
+        ],
+      ),
     );
   }
 
@@ -61,7 +87,9 @@ class MessageBubble extends StatelessWidget {
         return Text(
           message.text,
           style: TextStyle(
-            color: isMe ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSecondary,
+            color: isMe
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onSecondary,
           ),
         );
       case MessageType.image:
@@ -79,7 +107,6 @@ class MessageBubble extends StatelessWidget {
 
   Widget _buildImageMessage(BuildContext context) {
     return GestureDetector(
-
       onTap: () {
         Navigator.push(
           context,
@@ -110,7 +137,6 @@ class MessageBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
@@ -120,12 +146,15 @@ class MessageBubble extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-         const SizedBox(height: 5,),
-         Text(
-        message.text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            message.text,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
         ],
       ),
     );
