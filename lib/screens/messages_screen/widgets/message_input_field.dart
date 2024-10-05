@@ -210,6 +210,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                           left: 9,
                           top: 7,
                           bottom: 7,
+                          right: 7,
                         ),
                         fillColor: Theme.of(context).colorScheme.secondary,
                       ),
