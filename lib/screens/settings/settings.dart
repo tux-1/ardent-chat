@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/helpers/auth_helper.dart';
 import '../../common/widgets/theme_switch.dart';
 import '../profile_screen/profile_screen.dart';
+import 'cubit/settings_cubit.dart';
+import 'cubit/settings_state.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -59,14 +62,23 @@ class SettingsPage extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
             const SizedBox(height: 10),
-            ListTileWidget(
-              title: 'Show online Status',
-              trailing: Switch(
-                value: false,
-                onChanged: (bool value) {
-                  ////
-                },
-              ),
+            BlocConsumer<SettingsCubit, SettingsState>(
+              listener: (context, state) {
+                // Handle state changes if needed
+              },
+              builder: (context, state) {
+                return ListTileWidget(
+                  title: 'Show Online Status',
+                  trailing: Switch(
+                    value: state.isOnlineStatusEnabled,
+                    onChanged: (bool value) {
+                      context
+                          .read<SettingsCubit>()
+                          .updateOnlineStatusPreference(value);
+                    },
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 10),
             ListTileWidget(

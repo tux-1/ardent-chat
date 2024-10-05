@@ -6,6 +6,7 @@ import 'package:ardent_chat/screens/login_screen/login_screen.dart';
 import 'package:ardent_chat/screens/messages_screen/cubit/messages_cubit.dart';
 
 import 'package:ardent_chat/screens/onboarding/onboarding_screen.dart';
+import 'package:ardent_chat/screens/settings/cubit/settings_cubit.dart';
 import 'package:ardent_chat/screens/splash/splash_screen.dart';
 import 'package:ardent_chat/screens/verification/verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,6 +97,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ChatsCubit>(create: (_) => ChatsCubit()),
+        BlocProvider<SettingsCubit>(create: (_) => SettingsCubit(),),
         BlocProvider<MessagesCubit>(
           create: (_) => MessagesCubit(),
         ),

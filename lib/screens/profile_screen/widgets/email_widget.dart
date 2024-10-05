@@ -12,12 +12,12 @@ class EmailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: const Icon(Icons.email_outlined),
+      leading: Icon(Icons.email_outlined,color: Theme.of(context).colorScheme.onPrimaryContainer,),
       isThreeLine: true,
       title: Text(
         'Email',
         style: textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       subtitle: Text(

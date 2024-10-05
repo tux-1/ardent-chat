@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+
 import 'package:flutter/material.dart';
 import '../../../common/helpers/profile_helper.dart';
 import 'profile_state.dart';
@@ -33,6 +34,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: ProfileStatus.error, errorMessage: 'Failed to load profile'));
     }
   }
+
+  
 
   Future<void> saveName(String newName) async {
     try {

@@ -15,6 +15,7 @@ class ProfileHelper {
     // Update the user's preference for showing online status in Firestore
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'showOnline': showOnline,
+      'isOnline' : showOnline,
     });
   }
 
@@ -137,5 +138,16 @@ class ProfileHelper {
     // Get the URL of the uploaded image
     final String imageUrl = await ref.getDownloadURL();
     return imageUrl;
+  }
+
+  static Future<bool> checkUsernameExists(String username) async {
+    final usernameQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username.toLowerCase())
+        .get();
+    if (usernameQuery.docs.first.data()['username'] == username) {
+      debugPrint('Username is taken');
+    }
+    return usernameQuery.docs.first.data()['username'] == username;
   }
 }

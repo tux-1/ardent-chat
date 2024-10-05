@@ -92,8 +92,8 @@ class AuthHelper {
 
   static Future<void> signOut(BuildContext context) async {
     final nav = Navigator.of(context);
+    await ProfileHelper.updateIsOnlineStatus(false);
     await _auth.signOut();
-    ProfileHelper.updateIsOnlineStatus(false);
     nav.popUntil((route) => route.isFirst);
     nav.pushReplacementNamed(Routes.loginScreen);
   }

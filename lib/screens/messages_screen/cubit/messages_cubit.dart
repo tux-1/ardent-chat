@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/models/chat_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/models/message.dart';
 import '../../../common/models/request_status.dart';
@@ -7,10 +8,10 @@ import 'messages_state.dart';
 class MessagesCubit extends Cubit<MessagesState> {
   MessagesCubit() : super(MessagesState());
 
-  void fetchMessages(String chatId) {
-    emit(state.copyWith(status: RequestStatus.loading));
+  void fetchMessages(Chat chat) {
+    emit(state.copyWith(status: RequestStatus.loading, chat: chat));
 
-    MessagesHelper.fetchMessagesStream(chatId).listen((messages) {
+    MessagesHelper.fetchMessagesStream(chat.chatId).listen((messages) {
       emit(
         state.copyWith(
           messages: messages,

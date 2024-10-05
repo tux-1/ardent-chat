@@ -16,7 +16,9 @@ class OnboardingScreen extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/welcome (1).png',
-              fit: BoxFit.fill,
+              height: 500,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
             const Spacer(flex: 2),
             const Text(
@@ -28,7 +30,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const Spacer(flex: 1),
+            const SizedBox(height: 20,),
             const Text(
               'Connect people around the world for free',
               style: TextStyle(

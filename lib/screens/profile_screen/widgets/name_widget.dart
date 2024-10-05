@@ -1,3 +1,4 @@
+import 'package:ardent_chat/common/helpers/profile_helper.dart';
 import 'package:flutter/material.dart';
 
 class NameWidget extends StatelessWidget {
@@ -14,11 +15,12 @@ class NameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: const Icon(Icons.person_2_outlined),
+      leading: Icon(Icons.person_2_outlined,
+          color: Theme.of(context).colorScheme.onPrimaryContainer),
       title: Text(
         'Name',
         style: textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       isThreeLine: true,
@@ -38,15 +40,20 @@ class NameWidget extends StatelessWidget {
             currentName,
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const Text("This name will be visible to your contacts"),
+          Text(
+            "This name will be visible to your contacts",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
         ],
       ),
     );
   }
 
   Future<void> _showEditDialog(BuildContext context) async {
-    final TextEditingController nameController =
-        TextEditingController(text: currentName);
+    final TextEditingController nameController = TextEditingController(text: currentName);
+    String? errorMessage;
 
     await showDialog(
       context: context,
@@ -58,9 +65,17 @@ class NameWidget extends StatelessWidget {
               borderRadius: BorderRadius.zero,
             ),
             title: const Text('Edit Name'),
-            content: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(hintText: 'Enter new name'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter new name',
+                    errorText: errorMessage,
+                  ),
+                ),
+              ],
             ),
             actions: [
               TextButton(
@@ -70,9 +85,16 @@ class NameWidget extends StatelessWidget {
                 child: const Text('Cancel'),
               ),
               TextButton(
-                onPressed: () {
-                  onNameChanged(nameController.text);
-                  Navigator.of(context).pop();
+                onPressed: () async {
+                  final newName = nameController.text;
+                  final usernameExists =
+                      await ProfileHelper.checkUsernameExists(newName);
+                  if (!usernameExists) {
+                    await onNameChanged(newName);
+                    Navigator.of(context).pop();
+                  } else {
+                    errorMessage = 'Username is already taken.';
+                  }
                 },
                 child: const Text('Save'),
               ),

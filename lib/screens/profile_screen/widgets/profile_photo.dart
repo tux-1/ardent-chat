@@ -28,24 +28,24 @@ class ProfilePhoto extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
+                leading: Icon(Icons.photo_library,color: Theme.of(context).colorScheme.onPrimaryContainer,),
+                title: Text('Gallery',style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer)),
                 onTap: () {
                   onImagePicked(ImageSource.gallery);
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
+                leading: Icon(Icons.photo_camera,color: Theme.of(context).colorScheme.onPrimaryContainer,),
+                title:  Text('Camera',style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer)),
                 onTap: () {
                   onImagePicked(ImageSource.camera);
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text('Delete Photo'),
+                leading: Icon(Icons.delete,color: Theme.of(context).colorScheme.onPrimaryContainer,),
+                title: Text('Delete Photo',style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer)),
                 onTap: () {
                   onDeletePhoto();
                   Navigator.of(context).pop();

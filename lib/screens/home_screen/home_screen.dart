@@ -1,5 +1,6 @@
 import 'package:ardent_chat/common/constants/routes.dart';
 import 'package:ardent_chat/screens/chat_screen/chat_screen.dart';
+import 'package:ardent_chat/screens/settings/cubit/settings_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<ChatsCubit>().getChats();
+    context.read<SettingsCubit>().loadOnlineStatusPreference();
   }
 
   @override
