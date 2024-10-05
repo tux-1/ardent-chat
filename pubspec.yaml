@@ -44,7 +44,7 @@ dependencies:
   ionicons: ^0.2.2
   rxdart: ^0.28.0
   image_picker:
-  zego_uikit_prebuilt_call:
+  # zego_uikit_prebuilt_call:
 #  zego_uikit_signaling_plugin:
   permission_handler:
 dev_dependencies:

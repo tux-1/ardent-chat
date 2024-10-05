@@ -1,7 +1,5 @@
-import 'dart:io';
-import 'package:ardent_chat/screens/profile_screen/profile_cubit/profile_cubit.dart';
+import 'package:ardent_chat/common/helpers/profile_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NameWidget extends StatelessWidget {
   final String currentName;
@@ -17,7 +15,8 @@ class NameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: Icon(Icons.person_2_outlined, color: Theme.of(context).colorScheme.onPrimaryContainer),
+      leading: Icon(Icons.person_2_outlined,
+          color: Theme.of(context).colorScheme.onPrimaryContainer),
       title: Text(
         'Name',
         style: textTheme.titleMedium?.copyWith(
@@ -41,7 +40,12 @@ class NameWidget extends StatelessWidget {
             currentName,
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          Text("This name will be visible to your contacts", style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer)),
+          Text(
+            "This name will be visible to your contacts",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
         ],
       ),
     );
@@ -83,13 +87,14 @@ class NameWidget extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   final newName = nameController.text;
-                    final usernameExists = await ProfileCubit.checkUsernameExists(newName);
-                    if (usernameExists.isEmpty) {
-                      await onNameChanged(newName);
-                      Navigator.of(context).pop();
-                    } else {
-                      errorMessage = 'Username is already taken.';
-                    }
+                  final usernameExists =
+                      await ProfileHelper.checkUsernameExists(newName);
+                  if (!usernameExists) {
+                    await onNameChanged(newName);
+                    Navigator.of(context).pop();
+                  } else {
+                    errorMessage = 'Username is already taken.';
+                  }
                 },
                 child: const Text('Save'),
               ),
