@@ -176,7 +176,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(9),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.only(
@@ -210,7 +210,6 @@ class _MessageInputFieldState extends State<MessageInputField> {
                           left: 9,
                           top: 7,
                           bottom: 7,
-                          right: 7,
                         ),
                         fillColor: Theme.of(context).colorScheme.secondary,
                       ),
@@ -251,7 +250,6 @@ class _MessageInputFieldState extends State<MessageInputField> {
               ),
             ),
           ),
-          const SizedBox(width: 10),
           IconButton(
             icon: Icon(
               Icons.send,

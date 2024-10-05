@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../common/helpers/messages_helper.dart';
 import 'widgets/message_list_view.dart';
 import 'widgets/message_input_field.dart';
 import 'widgets/messages_app_bar.dart';
@@ -27,8 +26,14 @@ class _MessagesScreenState extends State<MessagesScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
+    context.read<MessagesCubit>().setActive(true);
     context.read<MessagesCubit>().fetchMessages(widget.chat);
+  }
+
+  @override
+  void deactivate() {
+    context.read<MessagesCubit>().setActive(false);
+    super.deactivate();
   }
 
   @override
@@ -38,16 +43,11 @@ class _MessagesScreenState extends State<MessagesScreen>
   }
 
   @override
-  void didUpdateWidget(covariant MessagesScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
-  }
-
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // When the screen is visible, mark messages as seen
-      MessagesHelper.markMessagesAsSeen(widget.chat.chatId);
+      context.read<MessagesCubit>().setActive(true);
+    } else {
+      context.read<MessagesCubit>().setActive(false);
     }
   }
 
