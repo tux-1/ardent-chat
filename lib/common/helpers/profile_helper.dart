@@ -145,9 +145,10 @@ class ProfileHelper {
         .collection('users')
         .where('username', isEqualTo: username.toLowerCase())
         .get();
-    if (usernameQuery.docs.first.data()['username'] == username) {
+    if (usernameQuery.docs.isNotEmpty) {
       debugPrint('Username is taken');
+      return true;
     }
-    return usernameQuery.docs.first.data()['username'] == username;
+    return false;
   }
 }

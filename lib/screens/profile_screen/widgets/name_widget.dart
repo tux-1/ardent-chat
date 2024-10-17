@@ -1,5 +1,5 @@
-import 'package:ardent_chat/common/helpers/profile_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:ardent_chat/common/helpers/profile_helper.dart';
 
 class NameWidget extends StatelessWidget {
   final String currentName;
@@ -58,48 +58,54 @@ class NameWidget extends StatelessWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SizedBox(
-          width: double.infinity,
-          child: AlertDialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-            title: const Text('Edit Name'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter new name',
-                    errorText: errorMessage,
-                  ),
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          title: const Text('Edit Name'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter new name',
+                  errorText: errorMessage,
                 ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
+                onChanged: (value) {
+                  errorMessage = null;
                 },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  final newName = nameController.text;
-                  final usernameExists =
-                      await ProfileHelper.checkUsernameExists(newName);
-                  if (!usernameExists) {
-                    await onNameChanged(newName);
-                    Navigator.of(context).pop();
-                  } else {
-                    errorMessage = 'Username is already taken.';
-                  }
-                },
-                child: const Text('Save'),
               ),
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final newName = nameController.text.trim();
+                if (newName.isEmpty) {
+                  errorMessage = 'Username cannot be empty.';
+                  (context as Element).markNeedsBuild();
+                  return;
+                }
+                if (newName != currentName) {
+                  final usernameExists = await ProfileHelper.checkUsernameExists(newName);
+                  if (usernameExists) {
+                    errorMessage = 'Username is already taken.';
+                    (context as Element).markNeedsBuild();
+                    return;
+                  }
+                }
+                await onNameChanged(newName);
+                Navigator.of(context).pop();},
+              child: const Text('Save'),
+            ),
+          ],
         );
       },
     );
