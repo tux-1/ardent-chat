@@ -87,6 +87,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
         return ImagePreview(
           selectedImage: selectedImage,
           selectedFile: selectedFile,
+          controller: widget.messageController,
           onClose: () {
             Navigator.pop(context);
             _removePreview();

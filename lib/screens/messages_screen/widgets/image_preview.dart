@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -7,9 +6,11 @@ class ImagePreview extends StatelessWidget {
   final File? selectedFile;
   final Function() onClose;
   final Function(String caption) onSend;
+  final TextEditingController controller;
 
   const ImagePreview({
     super.key,
+    required this.controller,
     required this.selectedImage,
     required this.selectedFile,
     required this.onClose,
@@ -28,15 +29,15 @@ class ImagePreview extends StatelessWidget {
             Positioned.fill(
               child: selectedImage != null
                   ? Image.file(
-                selectedImage!,
-                fit: BoxFit.contain,
-              )
+                      selectedImage!,
+                      fit: BoxFit.contain,
+                    )
                   : selectedFile != null
-                  ? Image.file(
-                selectedFile!,
-                fit: BoxFit.contain,
-              )
-                  : const SizedBox(),
+                      ? Image.file(
+                          selectedFile!,
+                          fit: BoxFit.contain,
+                        )
+                      : const SizedBox(),
             ),
             Positioned(
               top: 20,
@@ -61,11 +62,13 @@ class ImagePreview extends StatelessWidget {
               child: SafeArea(
                 child: Container(
                   color: Colors.black.withOpacity(0.6),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: controller,
                           decoration: InputDecoration(
                             hintText: 'Add a caption...',
                             hintStyle: TextStyle(
@@ -90,7 +93,7 @@ class ImagePreview extends StatelessWidget {
                           size: 30,
                         ),
                         onPressed: () {
-                          onSend("");
+                          onSend(controller.text);
                         },
                       ),
                     ],
