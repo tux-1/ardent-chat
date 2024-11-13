@@ -9,6 +9,7 @@ Ardent Chat is a lightweight, real-time messaging application designed for quick
 - **Contact Search**: Easily find contacts by their names.
 - **Seen Status**: Users can see if their messages have been read, enhancing communication clarity.
 - **Profile Management**: Update profile information, including name and profile picture.
+- **Light/Dark Theme**: Toggle between light and dark themes for a customized appearance.
 
 ## Screenshots
 <p float="left">
